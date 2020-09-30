@@ -1,0 +1,47 @@
+package io.spokestack.tray
+
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentFactory
+
+/**
+ * A factory class used to instantiate the Spokestack Tray fragment with custom configuration.
+ *
+ * Use when adding the Tray to an `Activity` like the following:
+ *
+ * ```kotlin
+ * override fun onCreate(savedInstanceState: Bundle?) {
+ *
+ *     val config = TrayConfig.Builder()
+ *         // builder setup...
+ *         .build()
+ *     supportFragmentManager.fragmentFactory = SpokestackTrayFactory(config)
+ *
+ *     // note that the factory is instantiated and set on the manager BEFORE calling
+ *     // `super.onCreate()`
+ *     super.onCreate(savedInstanceState)
+ *
+ *     // you'll probably also want an instance of the tray around to use in your `Activity`:
+ *     val tray = SpokestackTray.getInstance(config)
+ *
+ *     // ...
+ *
+ *     // if you're using a transaction manager instead of adding the fragment to your layout XML
+ *     val fragment = supportFragmentManager.fragmentFactory.instantiate(classLoader,
+ *         SpokestackTray::class.java.name)
+ *     supportFragmentManager.beginTransaction()
+ *         .replace(R.id.spokestack_tray, fragment)
+ *         .commitNow()
+ *
+ *     // ...
+ * }
+ * ```
+ */
+class SpokestackTrayFactory(private val trayConfig: TrayConfig) : FragmentFactory() {
+
+    override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
+        if (className == SpokestackTray::class.java.name) {
+            return SpokestackTray.getInstance(trayConfig)
+        }
+        return super.instantiate(classLoader, className)
+    }
+}

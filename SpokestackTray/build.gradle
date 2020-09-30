@@ -1,0 +1,117 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-android-extensions'
+    id 'maven-publish'
+    id 'signing'
+    id 'pl.allegro.tech.build.axion-release'
+}
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion "29.0.3"
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 30
+        versionCode 1
+        versionName "0.1"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildFeatures {
+        viewBinding true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+afterEvaluate {
+//    publishing {
+//        publications {
+//            release(MavenPublication) {
+//                from components.release
+//
+//                groupId = 'io.spokestack'
+//                artifactId = 'tray'
+//                version = android.defaultConfig.versionName
+//
+//                repositories {
+//                    jcenter()
+//                }
+//            }
+//
+//            snapshot(MavenPublication) {
+//                from components.release
+//
+//                groupId = 'io.spokestack'
+//                artifactId = 'tray'
+//                version = "$android.defaultConfig.versionName-SNAPSHOT"
+//
+//                repositories {
+//                    jcenter {
+//                        name "snapshots"
+//                        url "https://oss.jfrog.org/artifactory/simple/oss-snapshot-local"
+//                    }
+//                }
+//            }
+//        }
+//
+//        signing {
+//            sign publishing.publications.release
+//        }
+//    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation 'androidx.core:core-ktx:1.3.1'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.0-alpha07'
+
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+
+    // Spokestack dependencies
+    api "io.spokestack:spokestack-android:$spokestack_version"
+    implementation "org.tensorflow:tensorflow-lite:$tensorflow_version"
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+
+    // TTS
+    implementation 'androidx.lifecycle:lifecycle-common-java8:2.2.0'
+    implementation "androidx.media:media:$androidx_media_version"
+    implementation "com.google.android.exoplayer:exoplayer-core:$exoplayer_version"
+
+    // test dependencies
+    testImplementation 'junit:junit:4.13'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+}
+
+// deployment
+apply from: 'bintray.gradle'
+
+// from axion-release-plugin
+scmVersion {
+    tag {
+        prefix = ''
+    }
+    nextVersion {
+        suffix = 'SNAPSHOT'
+        separator = '-'
+    }
+}

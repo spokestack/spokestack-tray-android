@@ -1,0 +1,9 @@
+<resources>
+    <string name="attribution_img_desc">Spokestack attribution image</string>
+    <string name="listening_text">LISTENING</string>
+    <string name="listening">LISTENING</string>
+    <string name="open_tray_desc">open the voice tray</string>
+    <string name="close_tray_desc">close the voice tray</string>
+    <string name="sound_btn_desc">toggle text to speech responses</string>
+    <string name="grab_bar_desc">handle for resizing Spokestack Tray</string>
+</resources>
