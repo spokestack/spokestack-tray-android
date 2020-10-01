@@ -1,3 +1,0 @@
-include ':example'
-include ':SpokestackTray'
-rootProject.name = "Spokestack Tray"
