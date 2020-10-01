@@ -12,8 +12,8 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
-              
-      - name: aet up JDK
+
+      - name: set up JDK
         uses: actions/setup-java@v1
         with:
           java-version: 8
@@ -21,8 +21,11 @@ jobs:
       - name: build docs
         run: ./gradlew dokkaHtml
 
+      - name: make index redirect
+        run: echo '<meta http-equiv="refresh" content="0; url=https://spokestack.github.io/spokestack-tray-android/-spokestack-tray/">' > ./SpokestackTray/build/dokka/html/index.html
+
       - name: deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dokka/html
+          publish_dir: ./SpokestackTray/build/dokka/html
