@@ -45,7 +45,7 @@
                         android:id="@+id/imageView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:contentDescription="@string/grab_bar_desc"
+                        android:contentDescription="@string/spsk_grabBarDesc"
                         android:src="@drawable/drag_handle" />
 
                     <Space
@@ -69,7 +69,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:backgroundTint="@color/spsk_colorTransparent"
-                        android:contentDescription="@string/close_tray_desc"
+                        android:contentDescription="@string/spsk_closeTrayDesc"
                         android:src="@drawable/arrow_left" />
 
                     <Space
@@ -83,7 +83,7 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
                         android:gravity="center_horizontal|center_vertical"
-                        android:text="@string/listening" />
+                        android:text="@string/spsk_listening" />
 
                     <Space
                         android:layout_width="wrap_content"
@@ -96,7 +96,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:background="@drawable/sound_on_btn"
-                        android:contentDescription="@string/sound_btn_desc" />
+                        android:contentDescription="@string/spsk_soundBtnDesc" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -110,8 +110,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/messageStream"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/message_stream_height"
-                android:minHeight="@dimen/message_stream_min_height"
+                android:layout_height="@dimen/spsk_messageStreamHeight"
+                android:minHeight="@dimen/spsk_messageStreamMinHeight"
                 tools:listitem="@layout/system_msg_view" />
 
             <LinearLayout
@@ -129,7 +129,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:adjustViewBounds="false"
-                    android:contentDescription="@string/attribution_img_desc"
+                    android:contentDescription="@string/spsk_attributionImgDesc"
                     android:src="@drawable/attribution_image"
                     android:layout_marginBottom="7dp"
                     tools:layout_editor_absoluteY="254dp" />
@@ -146,10 +146,10 @@
 
     <ImageButton
         android:id="@+id/micButton"
-        android:layout_width="@dimen/button_width"
-        android:layout_height="@dimen/button_height"
+        android:layout_width="@dimen/spsk_buttonWidth"
+        android:layout_height="@dimen/spsk_buttonHeight"
         android:background="@drawable/mic_tab_btn"
-        android:contentDescription="@string/open_tray_desc"
+        android:contentDescription="@string/spsk_openTrayDesc"
         app:layout_constraintStart_toEndOf="@+id/trayView"
         app:layout_constraintTop_toTopOf="@id/trayView" />
 

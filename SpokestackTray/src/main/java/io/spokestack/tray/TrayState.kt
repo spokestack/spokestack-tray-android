@@ -19,7 +19,7 @@ internal data class TrayState(
 
     constructor(context: Context) : this() {
         this.messageStreamHeight =
-            context.resources.getDimensionPixelSize(R.dimen.message_stream_height)
+            context.resources.getDimensionPixelSize(R.dimen.spsk_messageStreamHeight)
     }
 
     constructor(parcel: Parcel) : this(

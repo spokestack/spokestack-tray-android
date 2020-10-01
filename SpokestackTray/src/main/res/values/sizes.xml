@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <integer name="tray_animate_ms">500</integer>
-    <integer name="button_width">60</integer>
-</resources>

@@ -17,8 +17,8 @@ class ScrollingGradient(val context: Context, private val pixelsPerSecond: Float
     private val paint = Paint()
     private var x: Float = 0.toFloat()
     private val animator = TimeAnimator()
-    private val startColor = ContextCompat.getColor(context, R.color.spsk_colorGradientEnd)
-    private val endColor = ContextCompat.getColor(context, R.color.spsk_colorGradientStart)
+    private val startColor = ContextCompat.getColor(context, R.color.spsk_colorGradientOne)
+    private val endColor = ContextCompat.getColor(context, R.color.spsk_colorGradientTwo)
 
     init {
         animator.setTimeListener(this)

@@ -16,7 +16,8 @@
       android:id="@+id/messageContent"
       android:layout_marginStart="50dp"
       android:layout_marginEnd="7dp"
-      android:backgroundTint="@color/spsk_colorUserMsg"
-      tools:text="@tools:sample/full_names" />
+      android:backgroundTint="@color/spsk_colorUserBg"
+      android:textColor="@color/spsk_colorUserText"
+  tools:text="@tools:sample/full_names" />
 
 </LinearLayout>

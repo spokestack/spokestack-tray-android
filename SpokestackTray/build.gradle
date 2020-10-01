@@ -37,43 +37,6 @@ android {
     }
 }
 
-afterEvaluate {
-//    publishing {
-//        publications {
-//            release(MavenPublication) {
-//                from components.release
-//
-//                groupId = 'io.spokestack'
-//                artifactId = 'tray'
-//                version = android.defaultConfig.versionName
-//
-//                repositories {
-//                    jcenter()
-//                }
-//            }
-//
-//            snapshot(MavenPublication) {
-//                from components.release
-//
-//                groupId = 'io.spokestack'
-//                artifactId = 'tray'
-//                version = "$android.defaultConfig.versionName-SNAPSHOT"
-//
-//                repositories {
-//                    jcenter {
-//                        name "snapshots"
-//                        url "https://oss.jfrog.org/artifactory/simple/oss-snapshot-local"
-//                    }
-//                }
-//            }
-//        }
-//
-//        signing {
-//            sign publishing.publications.release
-//        }
-//    }
-}
-
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"

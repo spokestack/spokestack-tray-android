@@ -79,6 +79,6 @@ class TrayView(trayContext: Context, attributeSet: AttributeSet) :
     }
 
     private fun calcMinHeight(): Int {
-        return resources.getDimensionPixelSize(R.dimen.message_stream_min_height)
+        return resources.getDimensionPixelSize(R.dimen.spsk_messageStreamMinHeight)
     }
 }

@@ -11,14 +11,6 @@ task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
 }
 
-dokkaHtml.configure {
-    dokkaSourceSets {
-        named("main") {
-            noAndroidSdkLink.set(false)
-        }
-    }
-}
-
 task javadocJar(type: Jar, dependsOn: dokkaHtml) {
     from dokkaJavadoc
 }
@@ -29,8 +21,8 @@ artifacts {
 }
 
 bintray {
-    user = bintrayUser
-    key = bintrayApiKey
+    user = project.hasProperty('bintrayUser') ? bintrayUser : ""
+    key = project.hasProperty('bintrayApiKey') ? bintrayApiKey : ""
 
     pkg {
         userOrg = 'spokestack'
@@ -43,7 +35,6 @@ bintray {
             vcsTag = version
             gpg {
                 sign = true
-//                passphrase = properties.signingPassword
             }
         }
     }

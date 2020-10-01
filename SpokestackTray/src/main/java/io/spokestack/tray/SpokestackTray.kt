@@ -257,7 +257,7 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
             binding.messageStream.adapter?.itemCount?.let {
                 binding.messageStream.scrollToPosition(it - 1)
             }
-            val text = requireContext().resources.getString(R.string.listening_text)
+            val text = requireContext().resources.getString(R.string.spsk_listening)
             binding.listenText.text = text
             binding.listenGradient.background = listenGradient
             listenGradient.start()
@@ -265,7 +265,7 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
             listenGradient.stop()
             binding.listenText.text = ""
             val color =
-                ContextCompat.getColor(requireContext(), R.color.spsk_colorGradientEnd)
+                ContextCompat.getColor(requireContext(), R.color.spsk_colorGradientOne)
             binding.listenGradient.setBackgroundColor(color)
         }
     }

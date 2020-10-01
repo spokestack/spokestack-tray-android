@@ -7,18 +7,15 @@
                 android:width="25dp"
                 android:height="25dp" />
             <solid android:color="@color/spsk_colorBrand" />
-            <stroke
-                android:width="1dp"
-                android:color="@color/spsk_colorBrand" />
         </shape>
     </item>
     <item>
         <inset
             android:drawable="@drawable/sound_on"
-            android:insetLeft="8dp"
-            android:insetTop="11dp"
-            android:insetRight="11dp"
-            android:insetBottom="11dp" />
+            android:insetLeft="9dp"
+            android:insetTop="10dp"
+            android:insetRight="10dp"
+            android:insetBottom="10dp" />
     </item>
 
 </layer-list>

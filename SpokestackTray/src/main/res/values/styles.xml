@@ -5,10 +5,10 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@drawable/message_bubble_bg</item>
-        <item name="android:backgroundTint">@color/spsk_colorSystemMsg</item>
+        <item name="android:backgroundTint">@color/spsk_colorSystemBg</item>
         <item name="android:fontFamily">@font/roboto</item>
         <item name="android:padding">7dp</item>
-        <item name="android:textColor">@color/spsk_colorDark</item>
+        <item name="android:textColor">@color/spsk_colorSystemText</item>
         <item name="android:textSize">14sp</item>
     </style>
 </resources>

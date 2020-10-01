@@ -6,7 +6,7 @@
         android:id="@+id/tray_open_transition"
         motion:constraintSetEnd="@+id/tray_opened"
         motion:constraintSetStart="@id/tray_closed"
-        motion:duration="@integer/tray_animate_ms"
+        motion:duration="@integer/spsk_trayAnimateMs"
         motion:motionInterpolator="easeInOut">
 
         <OnSwipe
@@ -19,7 +19,7 @@
         android:id="@+id/tray_close_transition"
         motion:constraintSetEnd="@+id/tray_closed"
         motion:constraintSetStart="@id/tray_opened"
-        motion:duration="@integer/tray_animate_ms"
+        motion:duration="@integer/spsk_trayAnimateMs"
         motion:motionInterpolator="easeInOut">
 
         <OnSwipe

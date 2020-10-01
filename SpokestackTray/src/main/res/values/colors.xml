@@ -2,12 +2,13 @@
 <resources>
     <color name="spsk_colorTrayBg">#FFFFFF</color>
     <color name="spsk_colorIcon">#FFFFFF</color>
-    <color name="spsk_colorGray">#E2E2E2</color>
-    <color name="spsk_colorDark">#000000</color>
+    <color name="spsk_colorDragHandle">#E2E2E2</color>
+    <color name="spsk_colorSystemText">#000000</color>
+    <color name="spsk_colorUserText">#000000</color>
     <color name="spsk_colorBrand">#2F5BEA</color>
-    <color name="spsk_colorSystemMsg">#CCE4FF</color>
-    <color name="spsk_colorUserMsg">#F6F9FC</color>
-    <color name="spsk_colorGradientStart">#61FAE9</color>
-    <color name="spsk_colorGradientEnd">#2f5BEA</color>
+    <color name="spsk_colorSystemBg">#CCE4FF</color>
+    <color name="spsk_colorUserBg">#F6F9FC</color>
+    <color name="spsk_colorGradientOne">@color/spsk_colorBrand</color>
+    <color name="spsk_colorGradientTwo">#61FAE9</color>
     <color name="spsk_colorTransparent">#00FFFFFF</color>
 </resources>
