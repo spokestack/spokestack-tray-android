@@ -1,0 +1,29 @@
+apply plugin: 'org.jetbrains.dokka'
+apply plugin: 'nebula.nebula-bintray-publishing'
+apply plugin: "nebula.release"
+apply from: "$rootDir/gradle/published.gradle"
+
+repositories {
+    gradlePluginPortal()
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+}
+
+task javadocJar(type: Jar, dependsOn: dokkaHtml) {
+    from dokkaJavadoc
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+bintray {
+    user = project.hasProperty('bintrayUser') ? bintrayUser : ""
+    apiKey = project.hasProperty('bintrayApiKey') ? bintrayApiKey : ""
+    userOrg = 'spokestack'
+    repo = 'io.spokestack'
+    pkgName = 'tray'
+}

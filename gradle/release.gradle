@@ -1,0 +1,10 @@
+apply plugin: "nebula.release"
+apply plugin: 'nebula.nebula-bintray-publishing'
+
+bintray {
+    user = project.hasProperty('bintrayUser') ? bintrayUser : ""
+    apiKey = project.hasProperty('bintrayApiKey') ? bintrayApiKey : ""
+    userOrg = 'spokestack'
+    repo = 'io.spokestack'
+    pkgName = 'tray'
+}
