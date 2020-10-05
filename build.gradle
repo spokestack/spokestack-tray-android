@@ -3,6 +3,7 @@ buildscript {
     ext {
         kotlin_version = "1.4.10"
         dokka_version = "1.4.10"
+        jfrog_plugin_version = "1.8.5"
         bintray_plugin_version = "8.5.0"
         release_plugin_version = "15.3.0"
         publishing_plugin_version = "17.1.0"
@@ -20,8 +21,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
         // deployment
-        classpath "com.netflix.nebula:nebula-bintray-plugin:${bintray_plugin_version}"
-        classpath "com.netflix.nebula:nebula-publishing-plugin:${publishing_plugin_version}"
+        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:${jfrog_plugin_version}"
         classpath "com.netflix.nebula:nebula-release-plugin:${release_plugin_version}"
         classpath "org.jetbrains.dokka:dokka-gradle-plugin:${dokka_version}"
     }
@@ -41,7 +41,4 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
-//task postRelease {
-//
-//}
 apply from: "$rootDir/gradle/release.gradle"

@@ -63,4 +63,6 @@ dependencies {
 }
 
 // deployment
-apply from: "$rootDir/gradle/release.gradle"
+apply from: "$rootDir/gradle/publish.gradle"
+
+rootProject.tasks.getByName('postRelease') finalizedBy bintrayUpload
