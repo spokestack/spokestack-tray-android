@@ -2,17 +2,25 @@ plugins {
     id 'com.android.library'
     id 'kotlin-android'
     id 'kotlin-android-extensions'
+    id 'com.gladed.androidgitversion' version '0.4.13'
+}
+
+apply from: "$rootDir/gradle/utils.gradle"
+
+androidGitVersion {
+    format '%tag%%.count%%<commit>%%%...dirty%'
+    hideBranches = [ 'main' ]
+    tagPattern(/^v([0-9]+\.){2}[0-9]+.*/)
 }
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "29.0.3"
 
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 1
-        versionName "0.1"
+        versionCode androidGitVersion.code()
+        versionName androidGitVersion.name()
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -63,6 +71,5 @@ dependencies {
 }
 
 // deployment
-apply from: "$rootDir/gradle/publish.gradle"
 
-rootProject.tasks.getByName('postRelease') finalizedBy bintrayUpload
+apply from: "$rootDir/gradle/publish.gradle"

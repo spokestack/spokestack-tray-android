@@ -1,6 +1,8 @@
 apply plugin: "nebula.release"
 apply plugin: "com.jfrog.bintray"
 
+apply from: "$rootDir/gradle/utils.gradle"
+
 bintray {
     user = project.hasProperty('bintrayUser') ? bintrayUser : ""
     key = project.hasProperty('bintrayApiKey') ? bintrayApiKey : ""
@@ -18,13 +20,3 @@ bintray {
     dryRun = false
 }
 
-
-def getVersion(){
-    def out = new ByteArrayOutputStream();
-    exec {
-        executable = 'git'
-        args = ['describe', '--tags']
-        standardOutput = out
-    }
-    return out.toString().replace('\n','')
-}
