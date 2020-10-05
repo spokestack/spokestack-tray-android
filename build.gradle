@@ -41,4 +41,4 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
-apply from: "$rootDir/gradle/release.gradle"
+apply plugin: "nebula.release"
