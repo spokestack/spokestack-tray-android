@@ -2,9 +2,6 @@ plugins {
     id 'com.android.library'
     id 'kotlin-android'
     id 'kotlin-android-extensions'
-    id 'maven-publish'
-    id 'signing'
-    id 'pl.allegro.tech.build.axion-release'
 }
 
 android {
@@ -66,15 +63,4 @@ dependencies {
 }
 
 // deployment
-apply from: 'bintray.gradle'
-
-// from axion-release-plugin
-scmVersion {
-    tag {
-        prefix = ''
-    }
-    nextVersion {
-        suffix = 'SNAPSHOT'
-        separator = '-'
-    }
-}
+apply from: "$rootDir/gradle/publish.gradle"

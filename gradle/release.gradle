@@ -1,0 +1,30 @@
+apply plugin: "nebula.release"
+apply plugin: "com.jfrog.bintray"
+
+bintray {
+    user = project.hasProperty('bintrayUser') ? bintrayUser : ""
+    key = project.hasProperty('bintrayApiKey') ? bintrayApiKey : ""
+    publications = ['tray']
+    pkg {
+        userOrg = 'spokestack'
+        repo = 'io.spokestack'
+        name = 'tray'
+    }
+    version {
+        name = getVersion()
+        vcsTag = getVersion()
+    }
+    publish = true
+    dryRun = false
+}
+
+
+def getVersion(){
+    def out = new ByteArrayOutputStream();
+    exec {
+        executable = 'git'
+        args = ['describe', '--tags']
+        standardOutput = out
+    }
+    return out.toString().replace('\n','')
+}
