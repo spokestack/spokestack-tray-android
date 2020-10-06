@@ -69,5 +69,4 @@ dependencies {
 }
 
 // deployment
-
 apply from: "$rootDir/gradle/publish.gradle"

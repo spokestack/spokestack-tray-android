@@ -1,7 +1,5 @@
 apply plugin: "com.jfrog.bintray"
 
-apply from: "$rootDir/gradle/utils.gradle"
-
 bintray {
     user = project.hasProperty('bintrayUser') ? bintrayUser : ""
     key = project.hasProperty('bintrayApiKey') ? bintrayApiKey : ""
@@ -13,4 +11,3 @@ bintray {
     }
     publish = true
 }
-
