@@ -1,12 +1,48 @@
+// publish script based on https://gist.github.com/gsavvid/f7ffe00d846a50de7490c2ecbd7b4169
+
 apply from: "$rootDir/gradle/release.gradle"
 apply plugin: 'org.jetbrains.dokka'
 apply plugin: 'maven-publish'
+
+dokkaJavadoc {
+    outputDirectory.set(file("$buildDir/javadoc"))
+    dokkaSourceSets {
+        named("main") {
+            jdkVersion.set(8)
+            includeNonPublic.set(false)
+            skipDeprecated.set(false)
+            reportUndocumented.set(true)
+
+            // Do not create index pages for empty packages
+            skipEmptyPackages.set(true)
+            sourceLink {
+                localDirectory.set(file("SpokestackTray/src/main/java"))
+                remoteUrl.set(
+                        URL("https://github.com/spokestack/spokestack-tray-android/blob/master/SpokestackTray/src/main/java"))
+                remoteLineSuffix.set("#L")
+            }
+        }
+    }
+}
+
+task androidJavadocsJar(type: Jar, dependsOn: dokkaJavadoc) {
+    archiveClassifier = 'javadoc'
+    from dokkaJavadoc.outputDirectory
+}
+
+task androidSourcesJar(type: Jar) {
+    archiveClassifier = 'sources'
+    from android.sourceSets.main.java.srcDirs
+}
 
 afterEvaluate {
     publishing {
         publications {
             tray(MavenPublication) {
                 from components.release
+
+                artifact androidSourcesJar
+                artifact androidJavadocsJar
 
                 groupId = 'io.spokestack'
                 artifactId = 'tray'
