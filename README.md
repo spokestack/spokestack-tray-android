@@ -25,6 +25,15 @@ If some of that didn't make sense, fear not! Read on, and we'll cover all the de
 
 ## Usage
 
+First, add the dependency to your app's `build.gradle`:
+
+```groovy
+dependencies {
+    // ...
+    implementation 'io.spokestack:tray:0.1.1'
+}
+```
+
 By default, Spokestack Tray handles ASR, NLU, and TTS for voice interactions with users—that's converting their voice to text, processing that text to produce an action, and synthesizing the app's response to be read back to the user. For more information on these features, see [the Spokestack docs](https://www.spokestack.io/docs/Concepts).
 
 To use NLU and TTS, you'll need a [free Spokestack account](https://www.spokestack.io/create). From your account page, you'll be able to create and download NLU models; and the client ID and secret key are needed at runtime for TTS requests.
@@ -94,9 +103,12 @@ If you prefer using a Fragment transaction manager instead of declaring the Tray
 
 ## Configuration
 
-The above sample will get you up and running with minimal fuss, but it's far from all that Spokestack Tray offers. When you're building a `TrayConfig` instance, you can choose to configure and provide the underlying `Spokestack` builder itself. This will let you do things like change ASR providers, set up custom listeners for events from individual systems, and add custom speech processing components if you need to. You can read about the Spokestack builder [here](https://www.spokestack.io/docs/Android/setup-wrapper).
+The above sample will get you up and running with minimal fuss, but it's far from all that Spokestack Tray offers. When you're building a `TrayConfig` instance, you can choose to configure and provide the underlying `Spokestack` builder itself. This will let you do things like change ASR providers, set up custom listeners for events from individual systems, and add custom speech processing components if you need to. You can read about the Spokestack builder [here](https://www.spokestack.io/docs/Android/turnkey-configuration).
 
-There are also a range of options that are applicable to the Tray itself, accessible via helper methods on the `TrayConfig.Builder` instance. Describing each one here would make this readme...ponderous, though, so check out the [documentation](https://spokestack.github.io/spokestack-tray-android/-spokestack-tray/) for more details. Documentation on `TrayConfig.Builder` is [here](https://spokestack.github.io/spokestack-tray-android/-spokestack-tray/io.spokestack.tray/-tray-config/-builder).
+There are also a range of options that are applicable to the Tray itself, accessible via helper methods on the `TrayConfig.Builder` instance. Describing each one here would make this readme...ponderous, though, so check out the [documentation](https://spokestack.github.io/spokestack-tray-android/-spokestack-tray/) for more details. Documentation on `TrayConfig.Builder` is [here](https://spokestack.github.io/spokestack-tray-android/-spokestack-tray/io.spokestack.tray/-tray-config/-builder**.
+
+**Note**: Spokestack's wakeword and NLU modules each require multiple files for proper configuration. In the above example, `wakewordModelURL` and `nluURL` represent paths to the parent directory containing those models. So when you see the wakeword model URLs listed as `https://subdomain.tld/path/to/detect.tflite`, etc., supply the part before `detect.tflite` to the Tray configuration.
+
 
 ## Customization
 
