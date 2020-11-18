@@ -19,9 +19,6 @@ import kotlin.math.min
  */
 class TrayView(trayContext: Context, attributeSet: AttributeSet) :
     ConstraintLayout(trayContext, attributeSet), View.OnTouchListener {
-    // TODO fix - either the initial layout height or the min height isn't being translated
-    //  correctly; the minimum height pixel value is turning out to be greater than the measured
-    //  height, even though both layout_height and minHeight are set in the layout XML
     private val heightMin = calcMinHeight()
 
     lateinit var statusBar: LinearLayout
@@ -71,8 +68,7 @@ class TrayView(trayContext: Context, attributeSet: AttributeSet) :
         // the message stream shouldn't push the status bar offscreen
         newHeight = min(newHeight, parentHeight - statusBar.measuredHeight)
         val params: ViewGroup.LayoutParams = messageStream.layoutParams as ViewGroup.LayoutParams
-//        if (newHeight >= heightMin) {
-        if (newHeight >= 0) {
+        if (newHeight >= heightMin) {
             params.height = newHeight
             messageStream.layoutParams = params
         }
