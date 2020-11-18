@@ -100,13 +100,6 @@ object SpokestackFactory {
     }
 
     private fun removeTrailingFile(url: String): String {
-        return url.let {
-            var path = it
-            if (path.endsWith(".tflite")) {
-                val lastSlash = it.lastIndexOf("/")
-                path = path.substring(0, lastSlash)
-            }
-            path.trimEnd('/')
-        }
+        return url.replace(Regex("/\\w+\\.\\w+$"), "")
     }
 }

@@ -5,8 +5,6 @@ import android.animation.AnimatorListenerAdapter
 import android.animation.TimeInterpolator
 import android.animation.ValueAnimator
 import android.view.View
-import android.view.ViewPropertyAnimator
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import androidx.recyclerview.widget.SimpleItemAnimator
 import kotlin.math.abs
@@ -18,14 +16,14 @@ import kotlin.math.abs
  */
 class MessageBubbleAnimator : SimpleItemAnimator() {
     var interpolator: TimeInterpolator? = null
-    val pendingAdds: ArrayList<RecyclerView.ViewHolder> = ArrayList()
-    val additions: ArrayList<ArrayList<RecyclerView.ViewHolder>> = ArrayList()
-    val addAnimations: ArrayList<RecyclerView.ViewHolder> = ArrayList()
+    val pendingAdds: ArrayList<ViewHolder> = ArrayList()
+    val additions: ArrayList<ArrayList<ViewHolder>> = ArrayList()
+    val addAnimations: ArrayList<ViewHolder> = ArrayList()
 
 
     override fun animateChange(
-        oldHolder: RecyclerView.ViewHolder?,
-        newHolder: RecyclerView.ViewHolder?,
+        oldHolder: ViewHolder?,
+        newHolder: ViewHolder?,
         fromLeft: Int,
         fromTop: Int,
         toLeft: Int,
@@ -58,7 +56,7 @@ class MessageBubbleAnimator : SimpleItemAnimator() {
         adder.run()
     }
 
-    override fun animateAdd(holder: RecyclerView.ViewHolder): Boolean {
+    override fun animateAdd(holder: ViewHolder): Boolean {
         resetAnimation(holder)
         holder.itemView.translationY = holder.itemView.height.toFloat()
         holder.itemView.alpha = 0f
@@ -79,7 +77,7 @@ class MessageBubbleAnimator : SimpleItemAnimator() {
         }.start()
     }
 
-    override fun endAnimation(item: RecyclerView.ViewHolder) {
+    override fun endAnimation(item: ViewHolder) {
         val view: View = item.itemView
         // this will trigger end callback which should set properties to their target values.
         view.animate().cancel()
@@ -151,13 +149,13 @@ class MessageBubbleAnimator : SimpleItemAnimator() {
         endAnimation(holder)
     }
 
-    override fun animateRemove(holder: RecyclerView.ViewHolder?): Boolean {
+    override fun animateRemove(holder: ViewHolder?): Boolean {
         dispatchRemoveFinished(holder)
         return true
     }
 
     override fun animateMove(
-        holder: RecyclerView.ViewHolder?,
+        holder: ViewHolder?,
         fromX: Int,
         fromY: Int,
         toX: Int,

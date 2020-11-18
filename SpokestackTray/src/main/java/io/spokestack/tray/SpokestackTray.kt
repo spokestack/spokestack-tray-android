@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import io.spokestack.spokestack.SpeechContext
 import io.spokestack.spokestack.Spokestack
 import io.spokestack.spokestack.SpokestackAdapter
+import io.spokestack.spokestack.SpokestackModule
 import io.spokestack.spokestack.nlu.NLUResult
 import io.spokestack.spokestack.tts.SynthesisRequest
 import io.spokestack.spokestack.tts.TTSEvent
@@ -243,11 +244,9 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
             if (config.sayGreeting) {
                 val prompt = VoicePrompt(config.greeting, expectFollowup = true)
                 synthesize(prompt)
-                addMessage(config.greeting, isSystem = true)
                 playedGreeting = true
-            } else {
-                addMessage(config.greeting, isSystem = true)
             }
+            addMessage(config.greeting, isSystem = true)
         }
         return playedGreeting
     }
@@ -474,13 +473,13 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
     inner class SpokestackListener : SpokestackAdapter() {
         var expectFollowup: Boolean = false
 
-        override fun call(arg: NLUResult) {
-            trayListener?.onClassification(arg)?.let {
+        override fun nluResult(result: NLUResult) {
+            trayListener?.onClassification(result)?.let {
                 say(it)
             }
         }
 
-        override fun eventReceived(event: TTSEvent) {
+        override fun ttsEvent(event: TTSEvent) {
             when (event.type) {
                 TTSEvent.Type.PLAYBACK_COMPLETE -> {
                     if (this.expectFollowup) {
@@ -504,7 +503,7 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
             this.expectFollowup = false
         }
 
-        override fun onEvent(event: SpeechContext.Event, context: SpeechContext) {
+        override fun speechEvent(event: SpeechContext.Event, context: SpeechContext) {
             when (event) {
                 SpeechContext.Event.ACTIVATE -> {
                     onTrace(EventTracer.Level.PERF, "ACTIVATE")
@@ -528,7 +527,6 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
                     setListening(false)
                 }
             }
-            super.onEvent(event, context)
         }
 
         private fun updateUserMessage(text: String) {
@@ -540,13 +538,11 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
             }
         }
 
-        override fun onTrace(level: EventTracer.Level, message: String) {
-            if (config.logLevel <= level.value()) {
-                trayListener?.onLog(message)
-            }
+        override fun trace(module: SpokestackModule, message: String) {
+            trayListener?.onLog(message)
         }
 
-        override fun onError(err: Throwable) {
+        override fun error(module: SpokestackModule, err: Throwable) {
             dispatchError(err)
         }
 
