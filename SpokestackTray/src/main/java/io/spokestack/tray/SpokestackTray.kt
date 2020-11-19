@@ -209,6 +209,7 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
         if (open && !checkMicPermission()) {
             Log.w(logTag, "Microphone permission must be granted for Spokestack to operate")
             this.openOnPermissions = true
+            requestPermissions(arrayOf(Manifest.permission.RECORD_AUDIO), audioPermission)
             return
         }
 
@@ -390,8 +391,11 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
     }
 
     override fun onResume() {
-        if (viewModel.state.isActive && checkMicPermission()) {
+        if (checkMicPermission()) {
             spokestack.start()
+            if (viewModel.state.isActive) {
+                spokestack.activate()
+            }
         }
         super.onResume()
     }
@@ -404,12 +408,12 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
         if (listenGradient.isRunning) {
             listenGradient.stop()
         }
+        spokestack.stop()
         super.onPause()
     }
 
     override fun onDetach() {
         _binding = null
-        spokestack.stop()
         super.onDetach()
     }
 
@@ -440,7 +444,6 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
         ) {
             return true
         }
-        requestPermissions(arrayOf(Manifest.permission.RECORD_AUDIO), audioPermission)
         return false
     }
 
