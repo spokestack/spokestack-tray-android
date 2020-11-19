@@ -36,7 +36,6 @@ import io.spokestack.spokestack.util.EventTracer
 import io.spokestack.tray.databinding.TrayFragmentBinding
 import io.spokestack.tray.message.Message
 import io.spokestack.tray.message.MessageAdapter
-import io.spokestack.tray.message.MessageBubbleAnimator
 import kotlin.math.ceil
 
 /**
@@ -303,7 +302,6 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
         val visible = if (ready) VISIBLE else INVISIBLE
         binding.trayMotion.visibility = visible
         binding.trayMotion.addTransitionListener(this)
-
         binding.trayView.bottom = 0
 
         savedInstanceState?.classLoader = javaClass.classLoader
@@ -373,7 +371,7 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
 
     private fun configureMessageStream() {
         // value is set in TrayViewModel and can never be null
-        val viewAdapter = MessageAdapter()
+        val viewAdapter = MessageAdapter(requireContext())
         viewAdapter.submitList(viewModel.getMessages().value)
 
         // observe messages for changes
@@ -387,7 +385,6 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
         binding.messageStream.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(requireContext())
-            itemAnimator = MessageBubbleAnimator()
             adapter = viewAdapter
         }
     }
@@ -530,6 +527,9 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
         }
 
         private fun updateUserMessage(text: String) {
+            if (text.isEmpty()) {
+                return
+            }
             val message = viewModel.getMessages().value?.lastOrNull()
             if (message == null || message.isSystem) {
                 addMessage(text, false)
