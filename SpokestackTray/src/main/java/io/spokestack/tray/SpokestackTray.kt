@@ -5,9 +5,6 @@ package io.spokestack.tray
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
-import android.graphics.drawable.InsetDrawable
-import android.graphics.drawable.LayerDrawable
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.HapticFeedbackConstants
@@ -16,9 +13,6 @@ import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.widget.ImageButton
-import androidx.annotation.RequiresApi
-import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -36,7 +30,6 @@ import io.spokestack.spokestack.util.EventTracer
 import io.spokestack.tray.databinding.TrayFragmentBinding
 import io.spokestack.tray.message.Message
 import io.spokestack.tray.message.MessageAdapter
-import kotlin.math.ceil
 
 /**
  * A Fragment that exposes the primary functionality of the Spokestack tray.
@@ -107,8 +100,7 @@ import kotlin.math.ceil
  * ```
  *
  */
-class SpokestackTray private constructor(private val config: TrayConfig) : Fragment(),
-    MotionLayout.TransitionListener {
+class SpokestackTray private constructor(private val config: TrayConfig) : Fragment() {
 
     private val logTag = javaClass.simpleName
     private val audioPermission = 1337
@@ -284,7 +276,7 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
         // if the model downloads finish after the fragment has been started, wait until now to
         // make the UI visible
         if (lifecycle.currentState >= Lifecycle.State.STARTED) {
-            binding.trayView.visibility = VISIBLE
+            binding.trayMotion.visibility = VISIBLE
         }
         ready = true
     }
@@ -302,7 +294,6 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
         // the download is complete
         val visible = if (ready) VISIBLE else INVISIBLE
         binding.trayMotion.visibility = visible
-        binding.trayMotion.addTransitionListener(this)
         binding.trayView.bottom = 0
 
         savedInstanceState?.classLoader = javaClass.classLoader
@@ -331,12 +322,8 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
     }
 
     private fun configureButtons() {
-        binding.micButton.apply {
-            setOnClickListener { setOpen(true) }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                adjustInsets(this)
-            }
-        }
+        binding.micButton.setTransitionProgress = this::setOpenPercentage
+
         binding.backButton.setOnClickListener { setOpen(false) }
 
         setSoundButtonBg()
@@ -346,16 +333,12 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
-    private fun adjustInsets(imageButton: ImageButton) {
-        val tab = imageButton.background as LayerDrawable
-        val mic = tab.findDrawableByLayerId(R.id.mic_icon) as InsetDrawable
-        val tabWidth = tab.intrinsicWidth
-        val verticalInset = (tabWidth / 15) * 8
-        val leftInset = ceil(tabWidth * .3).toInt()
-        val rightInset = ceil(tabWidth * .4).toInt()
-        val newMic = InsetDrawable(mic, leftInset, verticalInset, rightInset, verticalInset)
-        tab.setDrawable(1, newMic)
+    private fun setOpenPercentage(percent: Float) {
+        when (percent) {
+            0.0f -> setOpen(false)
+            1.0f -> setOpen(true)
+            else -> binding.trayMotion.progress = percent
+        }
     }
 
     private fun setSoundButtonBg() {
@@ -451,23 +434,6 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
         activity?.runOnUiThread {
             viewModel.addMessage(Message(isSystem, text))
         }
-    }
-
-    override fun onTransitionCompleted(layout: MotionLayout?, state: Int) {
-        val open = state == R.id.tray_opened
-        if (open != isOpen()) {
-            setOpen(open)
-        }
-    }
-
-    // unnecessary MotionLayout listener methods
-    override fun onTransitionStarted(p0: MotionLayout?, p1: Int, p2: Int) {
-    }
-
-    override fun onTransitionChange(p0: MotionLayout?, p1: Int, p2: Int, p3: Float) {
-    }
-
-    override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) {
     }
 
     inner class SpokestackListener : SpokestackAdapter() {

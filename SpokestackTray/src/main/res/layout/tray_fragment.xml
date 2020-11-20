@@ -10,6 +10,15 @@
     android:orientation="horizontal"
     app:layoutDescription="@xml/tray_fragment_scene">
 
+    <io.spokestack.tray.MicButton
+        android:id="@+id/micButton"
+        android:layout_width="@dimen/spsk_buttonWidth"
+        android:layout_height="@dimen/spsk_buttonHeight"
+        android:background="@drawable/mic_tab_btn"
+        android:contentDescription="@string/spsk_openTrayDesc"
+        app:layout_constraintStart_toEndOf="@id/trayView"
+        app:layout_constraintTop_toTopOf="@id/trayView" />
+
     <io.spokestack.tray.TrayView
         android:id="@+id/trayView"
         android:layout_width="match_parent"
@@ -143,14 +152,5 @@
         </LinearLayout>
 
     </io.spokestack.tray.TrayView>
-
-    <ImageButton
-        android:id="@+id/micButton"
-        android:layout_width="@dimen/spsk_buttonWidth"
-        android:layout_height="@dimen/spsk_buttonHeight"
-        android:background="@drawable/mic_tab_btn"
-        android:contentDescription="@string/spsk_openTrayDesc"
-        app:layout_constraintStart_toEndOf="@+id/trayView"
-        app:layout_constraintTop_toTopOf="@id/trayView" />
 
 </androidx.constraintlayout.motion.widget.MotionLayout>
