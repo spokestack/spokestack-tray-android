@@ -324,7 +324,10 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
     private fun configureButtons() {
         binding.micButton.setTransitionProgress = this::setOpenPercentage
 
-        binding.backButton.setOnClickListener { setOpen(false) }
+        binding.backButton.setOnClickListener {
+            spokestack.stopPlayback()
+            setOpen(false)
+        }
 
         setSoundButtonBg()
         binding.soundButton.setOnClickListener {
