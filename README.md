@@ -158,6 +158,11 @@ Value-based UI customizations are listed below. The filenames here point to the 
 
 * `spsk_listening`: The text displayed in the tray during active listening (ASR). Defaults to `"LISTENING"`.
 
+### `styles.xml`
+
+* `spsk_listening`: The text displayed in the tray during active listening (ASR). Defaults to `"LISTENING"`.
+* `spsk_messageFont`: The font family used to display ASR transcripts and system messages in the tray. Defaults to `sans-serif` (Roboto).
+
 
 ## License
 
