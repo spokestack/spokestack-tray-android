@@ -3,41 +3,99 @@
     xmlns:motion="http://schemas.android.com/apk/res-auto">
 
     <Transition
-        android:id="@+id/tray_open_transition"
-        motion:constraintSetEnd="@id/tray_opened"
-        motion:constraintSetStart="@id/tray_closed"
+        android:id="@+id/tray_open_left_transition"
+        motion:constraintSetEnd="@id/tray_opened_left"
+        motion:constraintSetStart="@id/tray_closed_left"
         motion:duration="@integer/spsk_trayAnimateMs"
-        motion:motionInterpolator="easeInOut">
-
-    </Transition>
+        motion:motionInterpolator="easeInOut" />
 
     <Transition
-        android:id="@+id/tray_close_transition"
-        motion:constraintSetEnd="@id/tray_closed"
-        motion:constraintSetStart="@id/tray_opened"
+        android:id="@+id/tray_close_left_transition"
+        motion:constraintSetEnd="@id/tray_closed_left"
+        motion:constraintSetStart="@id/tray_opened_left"
         motion:duration="@integer/spsk_trayAnimateMs"
-        motion:motionInterpolator="easeInOut">
-    </Transition>
+        motion:motionInterpolator="easeInOut" />
 
-    <ConstraintSet android:id="@+id/tray_closed">
+    <ConstraintSet android:id="@+id/tray_closed_left">
         <Constraint
             android:id="@id/trayView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintEnd_toStartOf="parent">
-            <PropertySet motion:motionProgress="0"/>
+            <PropertySet motion:motionProgress="0" />
         </Constraint>
+        <Constraint
+            android:id="@id/micButton"
+            android:layout_width="@dimen/spsk_buttonWidth"
+            android:layout_height="@dimen/spsk_buttonHeight"
+            motion:layout_constraintStart_toEndOf="@id/trayView"
+            motion:layout_constraintTop_toTopOf="@id/trayView" />
     </ConstraintSet>
 
-    <ConstraintSet android:id="@+id/tray_opened">
+    <ConstraintSet android:id="@+id/tray_opened_left">
         <Constraint
             android:id="@id/trayView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintEnd_toEndOf="parent">
-            <PropertySet motion:motionProgress="1"/>
+            <PropertySet motion:motionProgress="1" />
         </Constraint>
+        <Constraint
+            android:id="@id/micButton"
+            android:layout_width="@dimen/spsk_buttonWidth"
+            android:layout_height="@dimen/spsk_buttonHeight"
+            motion:layout_constraintStart_toEndOf="@id/trayView"
+            motion:layout_constraintTop_toTopOf="@id/trayView" />
+    </ConstraintSet>
+
+    <!-- right orientation -->
+    <Transition
+        android:id="@+id/tray_open_right_transition"
+        motion:constraintSetEnd="@id/tray_opened_right"
+        motion:constraintSetStart="@id/tray_closed_right"
+        motion:duration="@integer/spsk_trayAnimateMs"
+        motion:motionInterpolator="easeInOut" />
+
+    <Transition
+        android:id="@+id/tray_close_right_transition"
+        motion:constraintSetEnd="@id/tray_closed_right"
+        motion:constraintSetStart="@id/tray_opened_right"
+        motion:duration="@integer/spsk_trayAnimateMs"
+        motion:motionInterpolator="easeInOut" />
+
+    <ConstraintSet android:id="@+id/tray_closed_right">
+        <Constraint
+            android:id="@id/trayView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintStart_toEndOf="parent">
+            <PropertySet motion:motionProgress="0" />
+        </Constraint>
+        <Constraint
+            android:id="@id/micButton"
+            android:layout_width="@dimen/spsk_buttonWidth"
+            android:layout_height="@dimen/spsk_buttonHeight"
+            motion:layout_constraintEnd_toStartOf="@id/trayView"
+            motion:layout_constraintTop_toTopOf="@id/trayView" />
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/tray_opened_right">
+        <Constraint
+            android:id="@id/trayView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintStart_toStartOf="parent">
+            <PropertySet motion:motionProgress="1" />
+        </Constraint>
+        <Constraint
+            android:id="@id/micButton"
+            android:layout_width="@dimen/spsk_buttonWidth"
+            android:layout_height="@dimen/spsk_buttonHeight"
+            motion:layout_constraintEnd_toStartOf="@id/trayView"
+            motion:layout_constraintTop_toTopOf="@id/trayView" />
     </ConstraintSet>
 </MotionScene>

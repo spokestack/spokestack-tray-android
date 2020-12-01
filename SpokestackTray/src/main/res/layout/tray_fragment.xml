@@ -14,18 +14,14 @@
         android:id="@+id/micButton"
         android:layout_width="@dimen/spsk_buttonWidth"
         android:layout_height="@dimen/spsk_buttonHeight"
-        android:background="@drawable/mic_tab_btn"
-        android:contentDescription="@string/spsk_openTrayDesc"
-        app:layout_constraintStart_toEndOf="@id/trayView"
-        app:layout_constraintTop_toTopOf="@id/trayView" />
+        android:background="@drawable/mic_tab_btn_left"
+        android:contentDescription="@string/spsk_openTrayDesc"/>
 
     <io.spokestack.tray.TrayView
         android:id="@+id/trayView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/spsk_colorTrayBg"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         tools:context=".SpokestackTray">
 
         <LinearLayout

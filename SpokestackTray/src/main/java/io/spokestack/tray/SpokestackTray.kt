@@ -187,7 +187,8 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
      * @return Whether the tray is currently open.
      */
     fun isOpen(): Boolean {
-        return binding.trayMotion.currentState == R.id.tray_opened
+        val curState = binding.trayMotion.currentState
+        return curState == R.id.tray_opened_right || curState == R.id.tray_opened_left
     }
 
     /**
@@ -206,7 +207,6 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
         }
 
         var listening = open && listen
-        var targetState = R.id.tray_closed
         if (open) {
             spokestack.start()
             if (maybeGreet()) {
@@ -214,7 +214,6 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
             } else if (listen) {
                 spokestack.activate()
             }
-            targetState = R.id.tray_opened
             if (config.haptic) {
                 binding.micButton.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
             }
@@ -224,7 +223,11 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
 
         activity?.runOnUiThread {
             setListening(listening)
-            binding.trayMotion.transitionToState(targetState)
+            if (open) {
+                binding.trayMotion.transitionToEnd()
+            } else {
+                binding.trayMotion.transitionToStart()
+            }
         }
     }
 
@@ -285,10 +288,13 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = TrayFragmentBinding.inflate(layoutInflater)
 
+        configureButtons()
         configureAnimations(requireContext())
+
+        configureMessageStream()
 
         // if we're still downloading models, hide the UI for now; it will be made visible when
         // the download is complete
@@ -301,27 +307,11 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
         viewModel.state = savedState ?: TrayState(binding.messageStream.context)
         restoreState(viewModel.state)
 
-        configureButtons()
-        configureMessageStream()
-
         return binding.root
     }
 
-    private fun configureAnimations(context: Context) {
-        val px = resources.displayMetrics.widthPixels.toFloat() / 2
-        listenGradient = ScrollingGradient(context, px)
-    }
-
-    private fun restoreState(state: TrayState) {
-        this.playTts = state.playTts
-        val params: ViewGroup.LayoutParams =
-            binding.messageStream.layoutParams as ViewGroup.LayoutParams
-        params.height = state.messageStreamHeight
-        binding.messageStream.layoutParams = params
-        setOpen(state.isActive)
-    }
-
     private fun configureButtons() {
+        binding.micButton.setOrientation(config.orientation)
         binding.micButton.setTransitionProgress = this::setOpenPercentage
 
         binding.backButton.setOnClickListener {
@@ -354,6 +344,24 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
         activity?.runOnUiThread {
             binding.soundButton.background = background
         }
+    }
+
+    private fun configureAnimations(context: Context) {
+        // default is lefthand orientation; only change if necessary
+        if (config.orientation == TrayConfig.Orientation.RIGHT) {
+            binding.trayMotion.setTransition(R.id.tray_closed_right, R.id.tray_opened_right)
+        }
+        val px = resources.displayMetrics.widthPixels.toFloat() / 2
+        listenGradient = ScrollingGradient(context, px)
+    }
+
+    private fun restoreState(state: TrayState) {
+        this.playTts = state.playTts
+        val params: ViewGroup.LayoutParams =
+            binding.messageStream.layoutParams as ViewGroup.LayoutParams
+        params.height = state.messageStreamHeight
+        binding.messageStream.layoutParams = params
+        setOpen(state.isActive)
     }
 
     private fun configureMessageStream() {

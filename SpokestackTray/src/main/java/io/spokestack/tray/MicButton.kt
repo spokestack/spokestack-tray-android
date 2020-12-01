@@ -8,6 +8,7 @@ import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.core.view.GestureDetectorCompat
 import kotlin.math.abs
 import kotlin.math.ceil
@@ -22,6 +23,7 @@ import kotlin.math.ceil
  */
 class MicButton(context: Context, attributes: AttributeSet) : View(context, attributes) {
 
+    private var rightOrientation = false
     private var touchStarted = false
     private var closing = false
     private var startX = 0f
@@ -31,7 +33,26 @@ class MicButton(context: Context, attributes: AttributeSet) : View(context, attr
 
     var setTransitionProgress: ((percent: Float) -> Unit)? = null
 
-    init {
+
+    /**
+     * Set the button's orientation, which potentially changes its background
+     * image and how it reacts to swipes.
+     *
+     * The default settings assume the button is oriented on the lefthand
+     * side of the screen, opening the tray to the right.
+     *
+     * @param orientation The button's orientation.
+     */
+    fun setOrientation(orientation: TrayConfig.Orientation) {
+        if (orientation == TrayConfig.Orientation.RIGHT) {
+            val micBg = ContextCompat.getDrawable(context, R.drawable.mic_tab_btn_right)
+            this.background = micBg
+            this.rightOrientation = true
+        }
+        adjustInsets()
+    }
+
+    private fun adjustInsets() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val tab = background as LayerDrawable
             val mic = tab.findDrawableByLayerId(R.id.mic_icon) as InsetDrawable
@@ -73,13 +94,16 @@ class MicButton(context: Context, attributes: AttributeSet) : View(context, attr
                 true
             }
             MotionEvent.ACTION_MOVE -> {
-                if (event.rawX < lastX) {
-                    closing = true
+                closing = when (rightOrientation) {
+                    true -> event.rawX > lastX
+                    false -> event.rawX < lastX
                 }
                 lastX = event.rawX
-                val adjustedX = lastX - startX
+                val adjustedX = abs(lastX - startX)
                 val swipePercent = adjustedX / screenWidth
-                setTransitionProgress?.invoke(swipePercent)
+                if (swipePercent > 0) {
+                    setTransitionProgress?.invoke(swipePercent)
+                }
                 true
             }
             else -> super.onTouchEvent(event)

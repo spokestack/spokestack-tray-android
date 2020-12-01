@@ -112,7 +112,24 @@ There are also a range of options that are applicable to the Tray itself, access
 
 ## Customization
 
-Most aspects of the tray's UI can be customized by overriding values set in the library. The filenames below point to the original definitions in the library's `res/values` folder, but replacements can be defined elsewhere in your project. The example app illustrates this by overriding the text color for system messages in `res/values/custom_colors.xml`.
+Most aspects of the tray's UI can be customized. Often this is accomplished in XML by overriding values set in the library.
+
+One exception to this is the tray's orientation: Its microphone button defaults to appearing as a right-facing tab on the lefthand side of the screen, with the tray consequently sliding in from the left. It also supports a righthand orientation but requires two changes in order to do so:
+
+1. Call `.orientation(TrayConfig.Orientation.RIGHT)` on the `TrayConfig`builder before building the configuration.
+1. Set appropriate layout parameters when including the tray Fragment in your layout. When the fragment is right-aligned to its parent, layout constraints in the tray's layout itself take care of the rest. Here's the example layout we gave above (a `ConstraintLayout`) modified for a righthand orientation:
+```xml
+<include
+  layout="@layout/spokestack_tray_fragment"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  app:layout_constraintBottom_toBottomOf="parent"
+  app:layout_constraintEnd_toEndOf="parent" />
+```
+
+Value-based UI customizations are listed below. The filenames here point to the original definitions in the library's `res/values` folder, but replacements can be defined elsewhere in your project. The example app illustrates this by overriding the text color for system messages in `res/values/custom_colors.xml`.
+
+### `colors.xml`
 
 * `spsk_colorTrayBg`: The background color used for the tray's message stream.
 * `spsk_colorIcon`: The foreground color used for icons that need to contrast with `spsk_colorBrand`. Defaults to white.

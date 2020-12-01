@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clipToPadding="false"
     android:clipChildren="false"
+    android:clipToPadding="false"
     tools:context=".example.MainActivity">
 
     <TextView
@@ -23,5 +23,8 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+    <!--    for righthand orientation, change the previous line to -->
+    <!--    app:layout_constraintEnd_toEndOf="parent" />-->
+    <!--    and ensure the orientation is set in the TrayConfig builder in MainActivity -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
