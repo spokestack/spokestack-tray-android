@@ -13,6 +13,7 @@ import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -100,7 +101,8 @@ import io.spokestack.tray.message.MessageAdapter
  * ```
  *
  */
-class SpokestackTray private constructor(private val config: TrayConfig) : Fragment() {
+class SpokestackTray private constructor(private val config: TrayConfig) : Fragment(),
+    MotionLayout.TransitionListener {
 
     private val logTag = javaClass.simpleName
     private val audioPermission = 1337
@@ -218,7 +220,9 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
                 binding.micButton.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
             }
         } else {
-            spokestack.deactivate()
+            if (spokestack.speechPipeline.context.isActive) {
+                spokestack.deactivate()
+            }
         }
 
         activity?.runOnUiThread {
@@ -300,6 +304,7 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
         // the download is complete
         val visible = if (ready) VISIBLE else INVISIBLE
         binding.trayMotion.visibility = visible
+        binding.trayMotion.addTransitionListener(this)
         binding.trayView.bottom = 0
 
         savedInstanceState?.classLoader = javaClass.classLoader
@@ -445,6 +450,24 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
         activity?.runOnUiThread {
             viewModel.addMessage(Message(isSystem, text))
         }
+    }
+
+    override fun onTransitionCompleted(layout: MotionLayout?, state: Int) {
+        if (isOpen()) {
+            trayListener?.onOpen()
+        } else {
+            trayListener?.onClose()
+        }
+    }
+
+    // unnecessary MotionLayout listener methods
+    override fun onTransitionStarted(p0: MotionLayout?, startId: Int, endId: Int) {
+    }
+
+    override fun onTransitionChange(p0: MotionLayout?, startId: Int, endId: Int, progress: Float) {
+    }
+
+    override fun onTransitionTrigger(p0: MotionLayout?, trigger: Int, pos: Boolean, prog: Float) {
     }
 
     inner class SpokestackListener : SpokestackAdapter() {
