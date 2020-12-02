@@ -19,7 +19,7 @@ import kotlin.math.min
  */
 class TrayView(trayContext: Context, attributeSet: AttributeSet) :
     ConstraintLayout(trayContext, attributeSet), View.OnTouchListener {
-    private val heightMin = calcMinHeight()
+    private val heightMin = resources.getDimensionPixelSize(R.dimen.spsk_messageStreamMinHeight)
 
     lateinit var statusBar: LinearLayout
     lateinit var messageStream: RecyclerView
@@ -72,9 +72,5 @@ class TrayView(trayContext: Context, attributeSet: AttributeSet) :
             params.height = newHeight
             messageStream.layoutParams = params
         }
-    }
-
-    private fun calcMinHeight(): Int {
-        return resources.getDimensionPixelSize(R.dimen.spsk_messageStreamMinHeight)
     }
 }

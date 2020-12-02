@@ -8,12 +8,11 @@ import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
 
 /**
- * A scrolling gradient animation for the listening indicator.
+ * A scrolling gradient animation usable as a background.
  * Adapted from https://stackoverflow.com/a/48696216/421784
  */
-class ScrollingGradient(val context: Context, private val pixelsPerSecond: Float) : Drawable(),
-    Animatable,
-    TimeAnimator.TimeListener {
+open class ScrollingGradient(val context: Context, private val pixelsPerSecond: Float) : Drawable(),
+    Animatable {
     private val paint = Paint()
     private var x: Float = 0.toFloat()
     private val animator = TimeAnimator()
@@ -21,7 +20,7 @@ class ScrollingGradient(val context: Context, private val pixelsPerSecond: Float
     private val endColor = ContextCompat.getColor(context, R.color.spsk_colorGradientTwo)
 
     init {
-        animator.setTimeListener(this)
+        animator.setTimeListener(Updater())
     }
 
     override fun onBoundsChange(bounds: Rect) {
@@ -58,8 +57,10 @@ class ScrollingGradient(val context: Context, private val pixelsPerSecond: Float
 
     override fun isRunning(): Boolean = animator.isRunning
 
-    override fun onTimeUpdate(animation: TimeAnimator, totalTime: Long, deltaTime: Long) {
-        x = pixelsPerSecond * totalTime / 1000
-        invalidateSelf()
+    inner class Updater : TimeAnimator.TimeListener {
+        override fun onTimeUpdate(animation: TimeAnimator, totalTime: Long, deltaTime: Long) {
+            x = pixelsPerSecond * totalTime / 1000
+            invalidateSelf()
+        }
     }
 }

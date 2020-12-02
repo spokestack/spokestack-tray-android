@@ -27,8 +27,8 @@
         </Constraint>
         <Constraint
             android:id="@id/micButton"
-            android:layout_width="@dimen/spsk_buttonWidth"
-            android:layout_height="@dimen/spsk_buttonHeight"
+            android:layout_width="@dimen/spsk_micTabWidth"
+            android:layout_height="@dimen/spsk_micTabHeight"
             motion:layout_constraintStart_toEndOf="@id/trayView"
             motion:layout_constraintTop_toTopOf="@id/trayView" />
     </ConstraintSet>
@@ -44,8 +44,8 @@
         </Constraint>
         <Constraint
             android:id="@id/micButton"
-            android:layout_width="@dimen/spsk_buttonWidth"
-            android:layout_height="@dimen/spsk_buttonHeight"
+            android:layout_width="@dimen/spsk_micTabWidth"
+            android:layout_height="@dimen/spsk_micTabHeight"
             motion:layout_constraintStart_toEndOf="@id/trayView"
             motion:layout_constraintTop_toTopOf="@id/trayView" />
     </ConstraintSet>
@@ -76,8 +76,8 @@
         </Constraint>
         <Constraint
             android:id="@id/micButton"
-            android:layout_width="@dimen/spsk_buttonWidth"
-            android:layout_height="@dimen/spsk_buttonHeight"
+            android:layout_width="@dimen/spsk_micTabWidth"
+            android:layout_height="@dimen/spsk_micTabHeight"
             motion:layout_constraintEnd_toStartOf="@id/trayView"
             motion:layout_constraintTop_toTopOf="@id/trayView" />
     </ConstraintSet>
@@ -93,8 +93,8 @@
         </Constraint>
         <Constraint
             android:id="@id/micButton"
-            android:layout_width="@dimen/spsk_buttonWidth"
-            android:layout_height="@dimen/spsk_buttonHeight"
+            android:layout_width="@dimen/spsk_micTabWidth"
+            android:layout_height="@dimen/spsk_micTabHeight"
             motion:layout_constraintEnd_toStartOf="@id/trayView"
             motion:layout_constraintTop_toTopOf="@id/trayView" />
     </ConstraintSet>

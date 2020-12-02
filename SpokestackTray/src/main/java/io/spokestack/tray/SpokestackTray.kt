@@ -10,8 +10,7 @@ import android.util.Log
 import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.INVISIBLE
-import android.view.View.VISIBLE
+import android.view.View.*
 import android.view.ViewGroup
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.content.ContextCompat
@@ -109,7 +108,7 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
 
     private lateinit var viewModel: TrayViewModel
     private lateinit var spokestack: Spokestack
-    private lateinit var listenGradient: ScrollingGradient
+    private lateinit var listenBubbleBg: ListenBubble
     private lateinit var spokestackListener: SpokestackListener
 
     private var _binding: TrayFragmentBinding? = null
@@ -255,16 +254,14 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
             binding.messageStream.adapter?.itemCount?.let {
                 binding.messageStream.scrollToPosition(it - 1)
             }
-            val text = requireContext().resources.getString(R.string.spsk_listening)
-            binding.listenText.text = text
-            binding.listenGradient.background = listenGradient
-            listenGradient.start()
+            binding.listenBubble.apply {
+                background = listenBubbleBg
+                visibility = VISIBLE
+            }
+            listenBubbleBg.start()
         } else {
-            listenGradient.stop()
-            binding.listenText.text = ""
-            val color =
-                ContextCompat.getColor(requireContext(), R.color.spsk_colorGradientOne)
-            binding.listenGradient.setBackgroundColor(color)
+            listenBubbleBg.stop()
+            binding.listenBubble.visibility = INVISIBLE
         }
     }
 
@@ -356,8 +353,8 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
         if (config.orientation == TrayConfig.Orientation.RIGHT) {
             binding.trayMotion.setTransition(R.id.tray_closed_right, R.id.tray_opened_right)
         }
-        val px = resources.displayMetrics.widthPixels.toFloat() / 2
-        listenGradient = ScrollingGradient(context, px)
+        val px = resources.getDimensionPixelSize(R.dimen.spsk_listenButtonWidth).toFloat()
+        listenBubbleBg = ListenBubble(context, px)
     }
 
     private fun restoreState(state: TrayState) {
@@ -404,8 +401,8 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
             messageStreamHeight = binding.messageStream.layoutParams.height
             viewModel.state.playTts = audioEnabled()
         }
-        if (listenGradient.isRunning) {
-            listenGradient.stop()
+        if (listenBubbleBg.isRunning) {
+            listenBubbleBg.stop()
         }
         spokestack.stop()
         super.onPause()

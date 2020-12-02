@@ -135,6 +135,7 @@ Value-based UI customizations are listed below. The filenames here point to the 
 * `spsk_colorIcon`: The foreground color used for icons that need to contrast with `spsk_colorBrand`. Defaults to white.
 * `spsk_colorDragHandle`: The color used for the tray's resizing drag handle.
 * `spsk_colorBrand`: The primary color of UI elements like the microphone button and icons without a background.
+* `spsk_colorListenText`: The color used for text in the "listening" bubble.
 * `spsk_colorSystemText`: The color used for text in system message bubbles.
 * `spsk_colorUserText`: The color used for text in user message bubbles.
 * `spsk_colorSystemBg`: The background color used for system message bubbles.
@@ -145,9 +146,11 @@ Value-based UI customizations are listed below. The filenames here point to the 
 
 ### `dimens.xml`
 
-* `spsk_buttonWidth`: Width for the microphone tab button. Defaults to `60dp`.
-* `spsk_buttonHeight`: Height for the microphone tab button. Defaults to `80dp` and should be kept in a 4:3 ratio with `spsk_buttonWidth`.
-* `spsk_messageStreamHeight`: Starting height for the message stream inside the tray. Defaults to `150dp`.
+* `spsk_micTabWidth`: Width for the microphone tab button. Defaults to `60dp`.
+* `spsk_micTabHeight`: Height for the microphone tab button. Defaults to `80dp` and should be kept in a 4:3 ratio with `spsk_micTabWidth`.
+* `spsk_listenBubbleWidth`: Width for the listening bubble that appears during ASR. Defaults to `120dp`and should be kept in a 2:1 ratio with `spsk_listenBubbleHeight`.
+* `spsk_listenBubbleHeight`: Height for the listening bubble that appears during ASR. Defaults to `60dp`.
+* `spsk_messageStreamHeight`: Starting height for the message stream inside the tray. Defaults to `100dp`.
 * `spsk_messageStreamMinHeight`: Minimum height to which the tray can be resized by drag. Defaults to `80dp`.
 
 ### `ints.xml`

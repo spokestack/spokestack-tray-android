@@ -7,4 +7,5 @@
 
     <string name="spsk_listening">LISTENING</string>
     <string name="spsk_messageFont">sans-serif</string>
+    <string name="listening_desc">notification that Spokestack is listening</string>
 </resources>
