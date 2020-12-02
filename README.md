@@ -3,6 +3,8 @@
 [ ![JCenter](https://api.bintray.com/packages/spokestack/io.spokestack/tray/images/download.svg) ](https://bintray.com/spokestack/io.spokestack/tray/_latestVersion)
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
 
+![Example app](./example/tray_demo.gif)
+
 A `Fragment` for adding voice control via Spokestack to any Android app. You can find a simple demo app that shows the tray in action in the `example` directory.
 
 ## Table of Contents
