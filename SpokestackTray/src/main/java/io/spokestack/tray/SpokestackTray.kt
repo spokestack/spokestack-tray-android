@@ -310,6 +310,7 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
 
     private fun configureButtons() {
         binding.micButton.setOrientation(config.orientation)
+        binding.micButton.trayView = binding.trayView
         binding.micButton.setTransitionProgress = this::setOpenPercentage
 
         binding.backButton.setOnClickListener {

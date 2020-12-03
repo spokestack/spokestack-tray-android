@@ -31,6 +31,7 @@ class MicButton(context: Context, attributes: AttributeSet) : View(context, attr
     private var detector = GestureDetectorCompat(context, GestureHandler())
     private var screenWidth = resources.displayMetrics.widthPixels
 
+    var trayView: TrayView? = null
     var setTransitionProgress: ((percent: Float) -> Unit)? = null
 
 
@@ -66,6 +67,7 @@ class MicButton(context: Context, attributes: AttributeSet) : View(context, attr
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
+        trayView?.onTouch(trayView?.statusBar!!, event)
         return when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 touchStarted = true
