@@ -31,9 +31,10 @@ class TrayView(trayContext: Context, attributeSet: AttributeSet) :
     // resize the message stream) is purely visual in nature rather than functional
     @SuppressLint("ClickableViewAccessibility")
     override fun onFinishInflate() {
-        super.onFinishInflate()
         statusBar = findViewById(R.id.statusBar)
         messageStream = findViewById(R.id.messageStream)
+        messageStream.layoutParams.width = context.resources.displayMetrics.widthPixels
+
         statusBar.setOnTouchListener(this)
         val tv = TypedValue()
         context.theme.resolveAttribute(R.attr.actionBarSize, tv, true)
@@ -41,6 +42,7 @@ class TrayView(trayContext: Context, attributeSet: AttributeSet) :
         parentHeight = screenHeight - TypedValue.complexToDimensionPixelSize(
             tv.data, resources.displayMetrics
         )
+        super.onFinishInflate()
     }
 
     override fun onTouch(v: View, event: MotionEvent): Boolean {

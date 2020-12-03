@@ -254,14 +254,11 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
             binding.messageStream.adapter?.itemCount?.let {
                 binding.messageStream.scrollToPosition(it - 1)
             }
-            binding.listenBubble.apply {
-                background = listenBubbleBg
-                visibility = VISIBLE
-            }
             listenBubbleBg.start()
+            binding.listenBubble.visibility = VISIBLE
         } else {
-            listenBubbleBg.stop()
             binding.listenBubble.visibility = INVISIBLE
+            listenBubbleBg.stop()
         }
     }
 
@@ -302,7 +299,6 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
         val visible = if (ready) VISIBLE else INVISIBLE
         binding.trayMotion.visibility = visible
         binding.trayMotion.addTransitionListener(this)
-        binding.trayView.bottom = 0
 
         savedInstanceState?.classLoader = javaClass.classLoader
         val savedState: TrayState? = savedInstanceState?.getParcelable(TrayState.SERIALIZATION_KEY)
@@ -321,7 +317,6 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
             setOpen(false)
         }
 
-        setSoundButtonBg()
         binding.soundButton.setOnClickListener {
             this.playTts = !this.playTts
             setSoundButtonBg()
@@ -355,10 +350,12 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
         }
         val px = resources.getDimensionPixelSize(R.dimen.spsk_listenButtonWidth).toFloat()
         listenBubbleBg = ListenBubble(context, px)
+        binding.listenBubble.background = listenBubbleBg
     }
 
     private fun restoreState(state: TrayState) {
         this.playTts = state.playTts
+        setSoundButtonBg()
         val params: ViewGroup.LayoutParams =
             binding.messageStream.layoutParams as ViewGroup.LayoutParams
         params.height = state.messageStreamHeight
