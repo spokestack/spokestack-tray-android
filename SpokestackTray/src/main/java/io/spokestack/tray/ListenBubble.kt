@@ -14,14 +14,13 @@ class ListenBubble(context: Context, pixelsPerSecond: Float) :
     init {
         val resources = context.resources
         val width = resources.getDimensionPixelSize(R.dimen.spsk_listenButtonWidth)
+        val forty = (width shr 1).toFloat()
         val twenty = (width shr 2).toFloat()
-        val ten = (width shr 3).toFloat()
+        val twentyFive = twenty + (width shr 4).toFloat()
         path.moveTo(twenty, 0f)
-        path.rCubicTo(-ten, 0f, -twenty, ten, -twenty, twenty)
-        path.rCubicTo(0f, ten, ten, twenty, twenty, twenty)
-        path.lineTo(twenty * 3, twenty * 2)
-        path.rCubicTo(ten, 0f, twenty, -ten, twenty, -twenty)
-        path.rCubicTo(0f, -ten, -ten, -twenty, -twenty, -twenty)
+        path.rCubicTo(-twentyFive, 0f, -twentyFive, forty, 0f, forty)
+        path.lineTo(twenty * 3, forty)
+        path.rCubicTo(twentyFive, 0f, twentyFive, -forty, 0f, -forty)
         path.close()
     }
 
