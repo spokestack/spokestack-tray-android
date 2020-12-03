@@ -10,6 +10,9 @@ import io.spokestack.spokestack.util.EventTracer
  * For trace messages, the tray dispatches those that meet or exceed the logging level specified
  * in tray configuration. Errors are dispatched via `onError`.
  *
+ * All methods have a default implementation, so adopters can choose those relevant to their
+ * use case.
+ *
  * @see TrayConfig
  * @see EventTracer.Level
  */
@@ -20,7 +23,7 @@ interface SpokestackTrayListener {
      *
      * @param message The log message.
      */
-    fun onLog(message: String)
+    fun onLog(message: String) {}
 
     /**
      * Spokestack's NLU classified an utterance.
@@ -28,22 +31,24 @@ interface SpokestackTrayListener {
      * @param result The classification result.
      * @return A string representing the application's response to the user utterance.
      */
-    fun onClassification(result: NLUResult): VoicePrompt?
+    fun onClassification(result: NLUResult): VoicePrompt? {
+        return null
+    }
 
     /**
      * Spokestack encountered an error.
      *
      * @param error The error.
      */
-    fun onError(error: Throwable)
+    fun onError(error: Throwable) {}
 
     /**
      * The tray UI opened. Called from the UI thread.
      */
-    fun onOpen()
+    fun onOpen() {}
 
     /**
      * The tray UI closed. Called from the UI thread.
      */
-    fun onClose()
+    fun onClose() {}
 }
