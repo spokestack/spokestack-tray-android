@@ -10,18 +10,23 @@
     android:orientation="horizontal"
     app:layoutDescription="@xml/tray_fragment_scene">
 
+    <io.spokestack.tray.MicButton
+        android:id="@+id/micButton"
+        android:layout_width="@dimen/spsk_micTabWidth"
+        android:layout_height="@dimen/spsk_micTabHeight"
+        android:background="@drawable/mic_tab_btn_left"
+        android:contentDescription="@string/spsk_openTrayDesc"/>
+
     <io.spokestack.tray.TrayView
         android:id="@+id/trayView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/spsk_colorTrayBg"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         tools:context=".SpokestackTray">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <LinearLayout
@@ -33,7 +38,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <Space
@@ -57,7 +62,7 @@
                 <LinearLayout
                     android:id="@+id/linearLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="5dp"
                     android:padding="5dp"
@@ -73,20 +78,7 @@
                         android:src="@drawable/arrow_left" />
 
                     <Space
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1" />
-
-                    <TextView
-                        android:id="@+id/listenText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_vertical"
-                        android:gravity="center_horizontal|center_vertical"
-                        android:text="@string/spsk_listening" />
-
-                    <Space
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1" />
 
@@ -101,22 +93,46 @@
 
             </LinearLayout>
 
-            <View
-                android:id="@+id/listenGradient"
-                android:layout_marginBottom="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="15dp" />
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/messageStream"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spsk_messageStreamHeight"
                 android:minHeight="@dimen/spsk_messageStreamMinHeight"
-                tools:listitem="@layout/system_msg_view" />
+                tools:listitem="@layout/system_msg_view" >
+
+            </androidx.recyclerview.widget.RecyclerView>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/listenBubble"
+                    android:layout_width="@dimen/spsk_listenButtonWidth"
+                    android:layout_height="@dimen/spsk_listenButtonHeight"
+                    android:background="@color/spsk_colorBrand"
+                    android:contentDescription="@string/listening_desc"
+                    android:fontFamily="@string/spsk_messageFont"
+                    android:gravity="center"
+                    android:text="@string/spsk_listening"
+                    android:textColor="@color/spsk_colorListenText"
+                    android:visibility="invisible" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <Space
@@ -128,10 +144,10 @@
                     android:id="@+id/attribution"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="7dp"
                     android:adjustViewBounds="false"
                     android:contentDescription="@string/spsk_attributionImgDesc"
                     android:src="@drawable/attribution_image"
-                    android:layout_marginBottom="7dp"
                     tools:layout_editor_absoluteY="254dp" />
 
                 <Space
@@ -143,14 +159,5 @@
         </LinearLayout>
 
     </io.spokestack.tray.TrayView>
-
-    <ImageButton
-        android:id="@+id/micButton"
-        android:layout_width="@dimen/spsk_buttonWidth"
-        android:layout_height="@dimen/spsk_buttonHeight"
-        android:background="@drawable/mic_tab_btn"
-        android:contentDescription="@string/spsk_openTrayDesc"
-        app:layout_constraintStart_toEndOf="@+id/trayView"
-        app:layout_constraintTop_toTopOf="@id/trayView" />
 
 </androidx.constraintlayout.motion.widget.MotionLayout>

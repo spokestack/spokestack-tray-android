@@ -11,6 +11,13 @@ import io.spokestack.spokestack.util.EventTracer
  * Data class holding all configuration for the Spokestack Tray.
  */
 class TrayConfig private constructor(builder: Builder) {
+
+    /**
+     * Determines the initial placement of the microphone button and the
+     * opening direction of the tray.
+     */
+    val orientation: Orientation = builder.orientation
+
     /**
      * A flag determining whether haptic feedback is sent when the tray opens.
      */
@@ -102,9 +109,18 @@ class TrayConfig private constructor(builder: Builder) {
     val listener: SpokestackTrayListener? = builder.listener
 
     /**
+     * A simple enum representing the tray's affinity for a certain side of the screen.
+     */
+    enum class Orientation {
+        LEFT,
+        RIGHT
+    }
+
+    /**
      * A fluent builder interface for creating a tray configuration.
      */
     data class Builder(
+        internal var orientation: Orientation = Orientation.LEFT,
         internal var haptic: Boolean = true,
         internal var sayGreeting: Boolean = true,
         internal var greeting: String = "",
@@ -122,6 +138,14 @@ class TrayConfig private constructor(builder: Builder) {
         internal var transcriptEditor: TranscriptEditor? = null,
     ) {
         var spokestackBuilder: Spokestack.Builder = Spokestack.Builder()
+
+        /**
+         * Set the tray's orientation, which determines the mic button's
+         * initial position and the opening direction of the tray.
+         *
+         * @param value The tray's orientation.
+         */
+        fun orientation(value: Orientation) = apply { this.orientation = value }
 
         /**
          * Set whether haptic feedback should be sent when the tray opens.

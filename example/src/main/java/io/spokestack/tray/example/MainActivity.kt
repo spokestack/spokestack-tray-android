@@ -1,7 +1,7 @@
 package io.spokestack.tray.example
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import io.spokestack.spokestack.nlu.NLUResult
 import io.spokestack.spokestack.util.EventTracer
 import io.spokestack.tray.*
@@ -24,6 +24,9 @@ class MainActivity : AppCompatActivity(), SpokestackTrayListener {
             .logLevel(EventTracer.Level.PERF.value())
             .withListener(this)
             .greeting(greeting)
+            // for righthand orientation, uncomment the following line and ensure the fragment is
+            // right-aligned to its parent in the layout
+//            .orientation(TrayConfig.Orientation.RIGHT)
             .build()
         supportFragmentManager.fragmentFactory = SpokestackTrayFactory(trayConfig)
         tray = SpokestackTray.getInstance(trayConfig)

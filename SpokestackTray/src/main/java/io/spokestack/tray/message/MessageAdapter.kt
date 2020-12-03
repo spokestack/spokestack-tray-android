@@ -1,15 +1,20 @@
 package io.spokestack.tray.message
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.spokestack.tray.R
 
-class MessageAdapter :
+class MessageAdapter(context: Context) :
     ListAdapter<Message, RecyclerView.ViewHolder>(Message.DIFF_UTIL_CALLBACK) {
+
+    private var startPosition = -1
+    private val bubbleAnimation = AnimationUtils.loadAnimation(context, R.anim.item_enter)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val msgView: LinearLayout
@@ -38,9 +43,17 @@ class MessageAdapter :
         val message = currentList[position]
 
         val layout = (holder as BubbleViewHolder).msgLayout
+        if (position > startPosition) {
+            layout.startAnimation(bubbleAnimation)
+            startPosition = position
+        }
         layout.findViewById<TextView>(R.id.messageContent).text = message.content
     }
 
+    override fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder) {
+        super.onViewDetachedFromWindow(holder)
+        (holder as BubbleViewHolder).msgLayout.clearAnimation()
+    }
 
     class BubbleViewHolder(val msgLayout: LinearLayout) : RecyclerView.ViewHolder(msgLayout)
 

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="spsk_buttonWidth">60dp</dimen>
-    <dimen name="spsk_buttonHeight">80dp</dimen>
-    <dimen name="spsk_messageStreamHeight">150dp</dimen>
+    <dimen name="spsk_micTabWidth">60dp</dimen>
+    <dimen name="spsk_micTabHeight">80dp</dimen>
+    <dimen name="spsk_listenButtonWidth">120dp</dimen>
+    <dimen name="spsk_listenButtonHeight">60dp</dimen>
+    <dimen name="spsk_messageStreamHeight">100dp</dimen>
     <dimen name="spsk_messageStreamMinHeight">80dp</dimen>
 </resources>

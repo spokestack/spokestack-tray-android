@@ -2,6 +2,7 @@
 <resources>
     <color name="spsk_colorTrayBg">#FFFFFF</color>
     <color name="spsk_colorIcon">#FFFFFF</color>
+    <color name="spsk_colorListenText">#FFFFFF</color>
     <color name="spsk_colorDragHandle">#E2E2E2</color>
     <color name="spsk_colorSystemText">#000000</color>
     <color name="spsk_colorUserText">#000000</color>

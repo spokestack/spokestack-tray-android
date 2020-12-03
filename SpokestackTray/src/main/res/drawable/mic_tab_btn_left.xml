@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <!--    <item android:drawable="@drawable/sound_circle"/>-->
-    <item android:id="@+id/mic_tab" android:drawable="@drawable/mic_tab">
+    <item android:id="@+id/mic_tab" android:drawable="@drawable/mic_tab_left">
     </item>
     <item android:id="@+id/mic_icon">
         <inset

@@ -3,6 +3,8 @@
 [ ![JCenter](https://api.bintray.com/packages/spokestack/io.spokestack/tray/images/download.svg) ](https://bintray.com/spokestack/io.spokestack/tray/_latestVersion)
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
 
+![Example app](./example/tray_demo.gif)
+
 A `Fragment` for adding voice control via Spokestack to any Android app. You can find a simple demo app that shows the tray in action in the `example` directory.
 
 ## Table of Contents
@@ -24,6 +26,15 @@ Oh, and after that initial interaction, the tray can be opened with a wakeword i
 If some of that didn't make sense, fear not! Read on, and we'll cover all the details below.
 
 ## Usage
+
+First, add the dependency to your app's `build.gradle`:
+
+```groovy
+dependencies {
+    // ...
+    implementation 'io.spokestack:tray:0.1.1'
+}
+```
 
 By default, Spokestack Tray handles ASR, NLU, and TTS for voice interactions with users—that's converting their voice to text, processing that text to produce an action, and synthesizing the app's response to be read back to the user. For more information on these features, see [the Spokestack docs](https://www.spokestack.io/docs/Concepts).
 
@@ -94,18 +105,39 @@ If you prefer using a Fragment transaction manager instead of declaring the Tray
 
 ## Configuration
 
-The above sample will get you up and running with minimal fuss, but it's far from all that Spokestack Tray offers. When you're building a `TrayConfig` instance, you can choose to configure and provide the underlying `Spokestack` builder itself. This will let you do things like change ASR providers, set up custom listeners for events from individual systems, and add custom speech processing components if you need to. You can read about the Spokestack builder [here](https://www.spokestack.io/docs/Android/setup-wrapper).
+The above sample will get you up and running with minimal fuss, but it's far from all that Spokestack Tray offers. When you're building a `TrayConfig` instance, you can choose to configure and provide the underlying `Spokestack` builder itself. This will let you do things like change ASR providers, set up custom listeners for events from individual systems, and add custom speech processing components if you need to. You can read about the Spokestack builder [here](https://www.spokestack.io/docs/Android/turnkey-configuration).
 
-There are also a range of options that are applicable to the Tray itself, accessible via helper methods on the `TrayConfig.Builder` instance. Describing each one here would make this readme...ponderous, though, so check out the [documentation](https://spokestack.github.io/spokestack-tray-android/-spokestack-tray/) for more details. Documentation on `TrayConfig.Builder` is [here](https://spokestack.github.io/spokestack-tray-android/-spokestack-tray/io.spokestack.tray/-tray-config/-builder).
+There are also a range of options that are applicable to the Tray itself, accessible via helper methods on the `TrayConfig.Builder` instance. Describing each one here would make this readme...ponderous, though, so check out the [documentation](https://spokestack.github.io/spokestack-tray-android/-spokestack-tray/) for more details. Documentation on `TrayConfig.Builder` is [here](https://spokestack.github.io/spokestack-tray-android/-spokestack-tray/io.spokestack.tray/-tray-config/-builder**.
+
+**Note**: Spokestack's wakeword and NLU modules each require multiple files for proper configuration. In the above example, `wakewordModelURL` and `nluURL` represent paths to the parent directory containing those models. So when you see the wakeword model URLs listed as `https://subdomain.tld/path/to/detect.tflite`, etc., supply the part before `detect.tflite` to the Tray configuration.
+
 
 ## Customization
 
-Most aspects of the tray's UI can be customized by overriding values set in the library. The filenames below point to the original definitions in the library's `res/values` folder, but replacements can be defined elsewhere in your project. The example app illustrates this by overriding the text color for system messages in `res/values/custom_colors.xml`.
+Most aspects of the tray's UI can be customized. Often this is accomplished in XML by overriding values set in the library.
+
+One exception to this is the tray's orientation: Its microphone button defaults to appearing as a right-facing tab on the lefthand side of the screen, with the tray consequently sliding in from the left. It also supports a righthand orientation but requires two changes in order to do so:
+
+1. Call `.orientation(TrayConfig.Orientation.RIGHT)` on the `TrayConfig`builder before building the configuration.
+1. Set appropriate layout parameters when including the tray Fragment in your layout. When the fragment is right-aligned to its parent, layout constraints in the tray's layout itself take care of the rest. Here's the example layout we gave above (a `ConstraintLayout`) modified for a righthand orientation:
+```xml
+<include
+  layout="@layout/spokestack_tray_fragment"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  app:layout_constraintBottom_toBottomOf="parent"
+  app:layout_constraintEnd_toEndOf="parent" />
+```
+
+Value-based UI customizations are listed below. The filenames here point to the original definitions in the library's `res/values` folder, but replacements can be defined elsewhere in your project. The example app illustrates this by overriding the text color for system messages in `res/values/custom_colors.xml`.
+
+### `colors.xml`
 
 * `spsk_colorTrayBg`: The background color used for the tray's message stream.
 * `spsk_colorIcon`: The foreground color used for icons that need to contrast with `spsk_colorBrand`. Defaults to white.
 * `spsk_colorDragHandle`: The color used for the tray's resizing drag handle.
 * `spsk_colorBrand`: The primary color of UI elements like the microphone button and icons without a background.
+* `spsk_colorListenText`: The color used for text in the "listening" bubble.
 * `spsk_colorSystemText`: The color used for text in system message bubbles.
 * `spsk_colorUserText`: The color used for text in user message bubbles.
 * `spsk_colorSystemBg`: The background color used for system message bubbles.
@@ -116,9 +148,11 @@ Most aspects of the tray's UI can be customized by overriding values set in the 
 
 ### `dimens.xml`
 
-* `spsk_buttonWidth`: Width for the microphone tab button. Defaults to `60dp`.
-* `spsk_buttonHeight`: Height for the microphone tab button. Defaults to `80dp` and should be kept in a 4:3 ratio with `spsk_buttonWidth`.
-* `spsk_messageStreamHeight`: Starting height for the message stream inside the tray. Defaults to `150dp`.
+* `spsk_micTabWidth`: Width for the microphone tab button. Defaults to `60dp`.
+* `spsk_micTabHeight`: Height for the microphone tab button. Defaults to `80dp` and should be kept in a 4:3 ratio with `spsk_micTabWidth`.
+* `spsk_listenBubbleWidth`: Width for the listening bubble that appears during ASR. Defaults to `120dp`and should be kept in a 2:1 ratio with `spsk_listenBubbleHeight`.
+* `spsk_listenBubbleHeight`: Height for the listening bubble that appears during ASR. Defaults to `60dp`.
+* `spsk_messageStreamHeight`: Starting height for the message stream inside the tray. Defaults to `100dp`.
 * `spsk_messageStreamMinHeight`: Minimum height to which the tray can be resized by drag. Defaults to `80dp`.
 
 ### `ints.xml`
@@ -128,6 +162,11 @@ Most aspects of the tray's UI can be customized by overriding values set in the 
 ### `strings.xml`
 
 * `spsk_listening`: The text displayed in the tray during active listening (ASR). Defaults to `"LISTENING"`.
+
+### `styles.xml`
+
+* `spsk_listening`: The text displayed in the tray during active listening (ASR). Defaults to `"LISTENING"`.
+* `spsk_messageFont`: The font family used to display ASR transcripts and system messages in the tray. Defaults to `sans-serif` (Roboto).
 
 
 ## License
