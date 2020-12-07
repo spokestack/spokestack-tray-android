@@ -7,7 +7,7 @@ import android.os.Build
 import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
-import android.view.View
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.ContextCompat
 import androidx.core.view.GestureDetectorCompat
 import kotlin.math.abs
@@ -21,7 +21,8 @@ import kotlin.math.ceil
  * tray's motion scene itself interfered with the button receiving click events, and registering
  * both `OnClick` and `OnSwipe` resulted in only one event being recognized.
  */
-class MicButton(context: Context, attributes: AttributeSet) : View(context, attributes) {
+class MicButton(context: Context, attributes: AttributeSet) :
+    AppCompatImageView(context, attributes) {
 
     private var rightOrientation = false
     private var touchStarted = false
@@ -45,11 +46,12 @@ class MicButton(context: Context, attributes: AttributeSet) : View(context, attr
      * @param orientation The button's orientation.
      */
     fun setOrientation(orientation: TrayConfig.Orientation) {
+        var micBg = ContextCompat.getDrawable(context, R.drawable.mic_tab_btn_left)
         if (orientation == TrayConfig.Orientation.RIGHT) {
-            val micBg = ContextCompat.getDrawable(context, R.drawable.mic_tab_btn_right)
-            this.background = micBg
             this.rightOrientation = true
+            micBg = ContextCompat.getDrawable(context, R.drawable.mic_tab_btn_right)
         }
+        this.background = micBg
         adjustInsets()
     }
 
