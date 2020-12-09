@@ -27,15 +27,6 @@ If some of that didn't make sense, fear not! Read on, and we'll cover all the de
 
 ## Usage
 
-First, add the dependency to your app's `build.gradle`:
-
-```groovy
-dependencies {
-    // ...
-    implementation 'io.spokestack:tray:0.1.1'
-}
-```
-
 By default, Spokestack Tray handles ASR, NLU, and TTS for voice interactions with users—that's converting their voice to text, processing that text to produce an action, and synthesizing the app's response to be read back to the user. For more information on these features, see [the Spokestack docs](https://www.spokestack.io/docs/Concepts).
 
 To use NLU and TTS, you'll need a [free Spokestack account](https://www.spokestack.io/create). From your account page, you'll be able to create and download NLU models; and the client ID and secret key are needed at runtime for TTS requests.
@@ -43,7 +34,7 @@ To use NLU and TTS, you'll need a [free Spokestack account](https://www.spokesta
 First, though, add the dependency to your app's `build.gradle` (check the JCenter badge above for the latest version):
 
 ```groovy
-implementation 'io.spokestack:tray:0.1.1'
+implementation 'io.spokestack:tray:0.2.0'
 ```
 
 As mentioned above, Spokestack Tray is implemented as a `Fragment` that renders on top of your existing `Activity` and handles voice interaction, so you'll want to add it to your activity's layout:
@@ -96,6 +87,8 @@ class MyActivity : AppCompatActivity(), SpokestackTrayListener {
         super.onStart()
     }
 ```
+
+The Tray is designed for seamless use across activities — for example, to allow a user to continue giving a voice command while the app switches activites — so its state is stored outside the fragment itself and survives fragment destruction. If your app needs to release resources held by the Tray and its underlying `Spokestack` instance, call the tray's `stop()` method. If you then need to re-enable voice control before the current Tray fragment instance is destroyed, you must call `start()`.
 
 ## Configuration
 

@@ -30,7 +30,6 @@ import io.spokestack.spokestack.util.EventTracer
 import io.spokestack.tray.databinding.TrayFragmentBinding
 import io.spokestack.tray.message.Message
 import io.spokestack.tray.message.MessageAdapter
-import java.lang.Exception
 
 /**
  * A Fragment that exposes the primary functionality of the Spokestack tray.
@@ -130,11 +129,33 @@ class SpokestackTray constructor(
     }
 
     /**
+     * Explicitly start the underlying [Spokestack] instance and its speech pipeline.
+     *
+     * This method should not be required under normal usage, but is necessary after an
+     * explicit call to [stop] or [close] to re-enable voice control without destroying the tray
+     * fragment.
+     */
+    fun start() {
+        spokestack.start()
+    }
+
+    /**
      * Release resources associated with the Tray and the underlying Spokestack instance.
      * Note that `spokestack.close()`/`.stop()` are not called automatically because in the normal
      * case, we want Spokestack to continue listening even if the fragment is killed (i.e., on
      * device rotation).
      *
+     * A convenience method that renames [close] and provides parallelism for [start].
+     */
+    fun stop() {
+        close()
+    }
+
+    /**
+     * Release resources associated with the Tray and the underlying Spokestack instance.
+     * Note that `spokestack.close()`/`.stop()` are not called automatically because in the normal
+     * case, we want Spokestack to continue listening even if the fragment is killed (i.e., on
+     * device rotation).
      *
      * **Note**: This method is **not** for visually sliding the tray's UI closed;
      * use [setOpen] for that. This method's name is inherited from

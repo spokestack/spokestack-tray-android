@@ -38,6 +38,7 @@ object SpokestackFactory {
             spokestack?.let {
                 it.removeListener(this.spokestackListener)
                 it.addListener(listener)
+                it.prepareTts()
                 this.spokestackListener = listener
             }
         }
