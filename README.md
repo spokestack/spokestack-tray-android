@@ -57,7 +57,11 @@ As mentioned above, Spokestack Tray is implemented as a `Fragment` that renders 
         />
 ```
 
-Then in your activity itself:
+**Note**: Depending on your app layout, you may also have to add `android:clipChildren="false"` to the fragment's parent layout(s) to avoid the microphone tab disappearing as the tray opens.
+
+Then make your activity itself extend `TrayActivity` (a subclass of `AppCompatActivity`), implement the methods it requires, and the library will take care of the rest.
+
+If you'd prefer to do the setup yourself, here's a sample that doesn't use `TrayActivity`:
 
 ```kotlin
 import io.spokestack.tray.*
