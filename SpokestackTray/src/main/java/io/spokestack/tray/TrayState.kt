@@ -36,6 +36,19 @@ data class TrayState(
         return messageData
     }
 
+    /**
+     * Clear the conversation state without resetting any user modifications
+     * like muting TTS or changing the tray size.
+     */
+    fun clear() {
+        apply {
+            expectFollowup = false
+            firstOpen = true
+            messages.clear()
+            messageData.notifyObserver()
+        }
+    }
+
     fun addMessage(message: Message) {
         // observers only need to know when to add a message to the chat stream;
         // other data is only for saving/restoring UI state

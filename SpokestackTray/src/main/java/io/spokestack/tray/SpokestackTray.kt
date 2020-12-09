@@ -134,9 +134,23 @@ class SpokestackTray constructor(
      * Note that `spokestack.close()`/`.stop()` are not called automatically because in the normal
      * case, we want Spokestack to continue listening even if the fragment is killed (i.e., on
      * device rotation).
+     *
+     *
+     * **Note**: This method is **not** for visually sliding the tray's UI closed;
+     * use [setOpen] for that. This method's name is inherited from
+     * [AutoCloseable].
      */
     override fun close() {
         spokestack.close()
+    }
+
+    /**
+     * Clear the tray's internal conversation history, making the next time it opens act like
+     * the first without resetting any user modifications like muting TTS or changing the tray
+     * size.
+     */
+    fun clear() {
+        state.clear()
     }
 
     /**
@@ -187,7 +201,7 @@ class SpokestackTray constructor(
     }
 
     /**
-     * Opens or closes the tray, optionally listening on open.
+     * Opens or closes the tray UI, optionally listening on open.
      *
      * @param open Whether the tray should open or close.
      * @param listen Whether the tray should begin listening when opened.
@@ -467,10 +481,10 @@ class SpokestackTray constructor(
 
     inner class SpokestackListener : SpokestackAdapter() {
         var expectFollowup: Boolean = false
-        set(value) {
-            state.expectFollowup = value
-            field = value
-        }
+            set(value) {
+                state.expectFollowup = value
+                field = value
+            }
 
         override fun nluResult(result: NLUResult) {
             try {
