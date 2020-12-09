@@ -49,6 +49,24 @@ data class TrayState(
         }
     }
 
+    /**
+     * Overwrites the current tray state with a previously saved version.
+     *
+     * @param other A saved version of the tray state to load.
+     */
+    fun loadFrom(other: TrayState) {
+        apply {
+            isOpen = other.isOpen
+            isActive = other.isActive
+            playTts = other.playTts
+            firstOpen = other.firstOpen
+            expectFollowup = other.expectFollowup
+            messageStreamHeight = other.messageStreamHeight
+            messages.clear()
+            messages.addAll(other.messages)
+        }
+    }
+
     fun addMessage(message: Message) {
         // observers only need to know when to add a message to the chat stream;
         // other data is only for saving/restoring UI state
@@ -62,13 +80,12 @@ data class TrayState(
             addMessage(Message(content = text))
         } else {
             messages[messages.size - 1] = Message(false, text)
+            messageData.notifyObserver()
         }
-        messageData.notifyObserver()
     }
 
     override fun describeContents(): Int {
         // unnecessary
-        Parcelable.CONTENTS_FILE_DESCRIPTOR
         return 0
     }
 

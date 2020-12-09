@@ -175,6 +175,42 @@ class SpokestackTray constructor(
     }
 
     /**
+     * Get a copy of the tray's current internal state.
+     *
+     * This state can be transferred to a [Bundle] in [onSaveInstanceState]:
+     *
+     * ```kotlin
+     * outState.putParcelable("tray_state", getState())
+     * ```
+     *
+     * @return A copy of the tray's internal state.
+     */
+    fun getState(): TrayState {
+        return state.copy()
+    }
+
+    /**
+     * Load the tray's internal state from a saved version.
+     *
+     * If saved to a [Bundle] as mentioned in [getState], the state can be retrieved
+     * as a [android.os.Parcelable]:
+     *
+     * ```kotlin
+     * val trayState: TrayState? = savedInstanceState.getParcelable("tray_state")
+     * ```
+     *
+     * The UI will be updated immediately to reflect the loaded state.
+     *
+     * @param savedState A previously saved version of the tray's state.
+     */
+    fun loadState(savedState: TrayState) {
+        state.loadFrom(savedState)
+        activity?.runOnUiThread {
+            restoreState()
+        }
+    }
+
+    /**
      * Submits text to the tray to be synthesized. Synthesis results will be read by the tray's
      * playback mechanism if the user has not disabled audio. The `text` field of the prompt will
      * be displayed regardless of the audio setting.
@@ -426,7 +462,6 @@ class SpokestackTray constructor(
             }
         }
         spokestackListener.expectFollowup = state.expectFollowup
-        setOpen(state.isOpen, state.isActive)
     }
 
     override fun onPause() {
