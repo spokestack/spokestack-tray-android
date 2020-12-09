@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.fragment.app.FragmentContainerView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/spokestack_tray"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:clipChildren="false"
+    android:elevation="3dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent">
 
+<androidx.fragment.app.FragmentContainerView
+    android:id="@+id/spokestack_tray"
     android:name="io.spokestack.tray.SpokestackTray"
-    android:tag="spokestack_tray"
+    android:tag="@string/fragment_tag"
     android:clipChildren="false"
     android:layout_width="match_parent"
     android:layout_height="match_parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

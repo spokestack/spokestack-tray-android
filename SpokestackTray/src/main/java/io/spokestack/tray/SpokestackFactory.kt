@@ -3,19 +3,21 @@ package io.spokestack.tray
 import android.content.Context
 import androidx.lifecycle.Lifecycle
 import io.spokestack.spokestack.Spokestack
+import io.spokestack.spokestack.SpokestackAdapter
 import java.io.File
 
 object SpokestackFactory {
     var spokestack: Spokestack? = null
+    var spokestackListener: SpokestackAdapter? = null
 
     /**
-     * Get the singleton Spokestack instance.
+     * Get the singleton Spokestack instance with a new configuration.
      */
-    fun getInstance(
+    fun getConfigured(
         trayConfig: TrayConfig,
         context: Context,
         lifecycle: Lifecycle,
-        listener: SpokestackTray.SpokestackListener
+        listener: SpokestackAdapter
     ): Spokestack {
         if (spokestack == null) {
             val builder =
@@ -30,7 +32,14 @@ object SpokestackFactory {
             trayConfig.properties.entries.forEach { entry ->
                 builder.setProperty(entry.key, entry.value)
             }
+            this.spokestackListener = listener
             spokestack = withModels(trayConfig, builder, context).build()
+        } else {
+            spokestack?.let {
+                it.removeListener(this.spokestackListener)
+                it.addListener(listener)
+                this.spokestackListener = listener
+            }
         }
         return spokestack!!
     }

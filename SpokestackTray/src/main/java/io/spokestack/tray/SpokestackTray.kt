@@ -10,13 +10,13 @@ import android.util.Log
 import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.*
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.spokestack.spokestack.SpeechContext
@@ -30,6 +30,7 @@ import io.spokestack.spokestack.util.EventTracer
 import io.spokestack.tray.databinding.TrayFragmentBinding
 import io.spokestack.tray.message.Message
 import io.spokestack.tray.message.MessageAdapter
+import java.lang.Exception
 
 /**
  * A Fragment that exposes the primary functionality of the Spokestack tray.
@@ -47,13 +48,10 @@ import io.spokestack.tray.message.MessageAdapter
  * ```xml
  * <!-- nested in the main layout, after other views/sublayouts -->
  *
- * <include
- * layout="@layout/spokestack_tray_fragment"
- * android:layout_width="wrap_content"
- * android:layout_height="wrap_content"
- * app:layout_constraintBottom_toBottomOf="parent"
- * app:layout_constraintStart_toStartOf="parent" />
- *
+ *     <include
+ *          android:id="@+id/tray_fragment"
+ *          layout="@layout/spokestack_tray_fragment"
+ *      />
  * ```
  *
  * Then in the `Activity` itself:
@@ -82,31 +80,26 @@ import io.spokestack.tray.message.MessageAdapter
  *         // note that the factory is instantiated and set on the manager BEFORE calling
  *         // `super.onCreate()`
  *         super.onCreate(savedInstanceState)
+ *     }
  *
+ *     override fun onStart() {
  *         // set the value of the lateinit `tray` var
  *         tray = SpokestackTray.getInstance(config)
+ *         super.onStart()
  *     }
  * ```
  *
- * If you prefer using a Fragment transaction manager instead of declaring the Fragment in
- * XML, add this after the code in the last section:
- *
- * ```kotlin
- *     val fragment = supportFragmentManager.fragmentFactory.instantiate(classLoader,
- *         SpokestackTray::class.java.name)
- *     supportFragmentManager.beginTransaction()
- *         .replace(R.id.spokestack_tray, fragment)
- *         .commitNow()
- * ```
- *
  */
-class SpokestackTray private constructor(private val config: TrayConfig) : Fragment(),
-    MotionLayout.TransitionListener {
+class SpokestackTray constructor(
+    private val config: TrayConfig,
+    private val state: TrayState
+) : Fragment(),
+    MotionLayout.TransitionListener,
+    AutoCloseable {
 
     private val logTag = javaClass.simpleName
     private val audioPermission = 1337
 
-    private lateinit var viewModel: TrayViewModel
     private lateinit var spokestack: Spokestack
     private lateinit var listenBubbleBg: ListenBubble
     private lateinit var spokestackListener: SpokestackListener
@@ -118,17 +111,8 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
 
     // binding is only valid between onCreateView and onDestroyView
     private val binding get() = _binding!!
-    internal val trayListener: SpokestackTrayListener? = config.listener
 
-    companion object {
-        private var tray: SpokestackTray? = null
-        fun getInstance(config: TrayConfig): SpokestackTray {
-            if (tray == null) {
-                tray = SpokestackTray(config)
-            }
-            return tray!!
-        }
-    }
+    var listener: SpokestackTrayListener? = config.listener
 
     /**
      * @return The Spokestack instance in use by the tray.
@@ -143,6 +127,16 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
      */
     fun audioEnabled(): Boolean {
         return playTts
+    }
+
+    /**
+     * Release resources associated with the Tray and the underlying Spokestack instance.
+     * Note that `spokestack.close()`/`.stop()` are not called automatically because in the normal
+     * case, we want Spokestack to continue listening even if the fragment is killed (i.e., on
+     * device rotation).
+     */
+    override fun close() {
+        spokestack.close()
     }
 
     /**
@@ -209,7 +203,6 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
 
         var listening = open && listen
         if (open) {
-            spokestack.start()
             if (maybeGreet()) {
                 listening = false
             } else if (listen) {
@@ -235,8 +228,8 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
     }
 
     private fun maybeGreet(): Boolean {
-        val isFirstOpen = viewModel.state.firstOpen
-        viewModel.state.firstOpen = false
+        val isFirstOpen = state.firstOpen
+        state.firstOpen = false
         var playedGreeting = false
         if (isFirstOpen && config.greeting != "") {
             if (config.sayGreeting) {
@@ -256,19 +249,28 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
             }
             listenBubbleBg.start()
             binding.listenBubble.visibility = VISIBLE
+            state.isActive = true
         } else {
             binding.listenBubble.visibility = INVISIBLE
             listenBubbleBg.stop()
+            state.isActive = false
         }
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        viewModel = ViewModelProvider(this).get(TrayViewModel::class.java)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         lifecycleScope.launchWhenCreated {
             spokestackListener = SpokestackListener()
             spokestack =
-                SpokestackFactory.getInstance(config, context, lifecycle, spokestackListener)
+                SpokestackFactory.getConfigured(
+                    config,
+                    requireContext(),
+                    lifecycle,
+                    spokestackListener
+                )
+            if (checkMicPermission()) {
+                spokestack.start()
+            }
             setReady()
         }
     }
@@ -287,7 +289,7 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = TrayFragmentBinding.inflate(layoutInflater)
+        _binding = TrayFragmentBinding.inflate(inflater)
 
         configureButtons()
         configureAnimations(requireContext())
@@ -301,9 +303,6 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
         binding.trayMotion.addTransitionListener(this)
 
         savedInstanceState?.classLoader = javaClass.classLoader
-        val savedState: TrayState? = savedInstanceState?.getParcelable(TrayState.SERIALIZATION_KEY)
-        viewModel.state = savedState ?: TrayState(binding.messageStream.context)
-        restoreState(viewModel.state)
 
         return binding.root
     }
@@ -354,27 +353,14 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
         binding.listenBubble.background = listenBubbleBg
     }
 
-    private fun restoreState(state: TrayState) {
-        this.playTts = state.playTts
-        setSoundButtonBg()
-        val params: ViewGroup.LayoutParams =
-            binding.messageStream.layoutParams as ViewGroup.LayoutParams
-        params.height = state.messageStreamHeight
-        binding.messageStream.layoutParams = params
-        setOpen(state.isActive)
-    }
-
     private fun configureMessageStream() {
-        // value is set in TrayViewModel and can never be null
         val viewAdapter = MessageAdapter(requireContext())
-        viewAdapter.submitList(viewModel.getMessages().value)
+        viewAdapter.submitList(state.messages)
 
         // observe messages for changes
-        viewModel.getMessages().observe(viewLifecycleOwner, { messages ->
+        state.liveData().observe(viewLifecycleOwner, { messages ->
             viewAdapter.notifyDataSetChanged()
-            binding.messageStream.apply {
-                scrollToPosition(messages.size - 1)
-            }
+            binding.messageStream.scrollToPosition(messages.size - 1)
         })
 
         binding.messageStream.apply {
@@ -386,34 +372,46 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
 
     override fun onResume() {
         if (checkMicPermission()) {
-            spokestack.start()
-            if (viewModel.state.isActive) {
-                spokestack.activate()
-            }
+            setOpen(state.isOpen, state.isActive)
         }
+        // ensure that spokestack has the right listener (e.g., after returning to an
+        // already-created fragment on the backstack)
+        spokestack =
+            SpokestackFactory.getConfigured(config, requireContext(), lifecycle, spokestackListener)
+        restoreState()
         super.onResume()
     }
 
-    override fun onPause() {
-        viewModel.state.apply {
-            messageStreamHeight = binding.messageStream.layoutParams.height
-            viewModel.state.playTts = audioEnabled()
+    private fun restoreState() {
+        this.playTts = state.playTts
+        setSoundButtonBg()
+        if (state.messageStreamHeight > 0) {
+            binding.messageStream.layoutParams.apply {
+                height = state.messageStreamHeight
+            }
         }
+        spokestackListener.expectFollowup = state.expectFollowup
+        setOpen(state.isOpen, state.isActive)
+    }
+
+    override fun onPause() {
+        state.apply {
+            messageStreamHeight = binding.messageStream.layoutParams.height
+            playTts = audioEnabled()
+        }
+        super.onPause()
+    }
+
+    override fun onDestroyView() {
         if (listenBubbleBg.isRunning) {
             listenBubbleBg.stop()
         }
-        spokestack.stop()
-        super.onPause()
+        super.onDestroyView()
     }
 
     override fun onDetach() {
         _binding = null
         super.onDetach()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.putParcelable(TrayState.SERIALIZATION_KEY, viewModel.state)
-        super.onSaveInstanceState(outState)
     }
 
     override fun onRequestPermissionsResult(
@@ -443,15 +441,17 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
 
     private fun addMessage(text: String, isSystem: Boolean) {
         activity?.runOnUiThread {
-            viewModel.addMessage(Message(isSystem, text))
+            state.addMessage(Message(isSystem, text))
         }
     }
 
     override fun onTransitionCompleted(layout: MotionLayout?, state: Int) {
         if (isOpen()) {
-            trayListener?.onOpen()
+            listener?.onOpen()
+            this.state.isOpen = true
         } else {
-            trayListener?.onClose()
+            listener?.onClose()
+            this.state.isOpen = false
         }
     }
 
@@ -467,10 +467,18 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
 
     inner class SpokestackListener : SpokestackAdapter() {
         var expectFollowup: Boolean = false
+        set(value) {
+            state.expectFollowup = value
+            field = value
+        }
 
         override fun nluResult(result: NLUResult) {
-            trayListener?.onClassification(result)?.let {
-                say(it)
+            try {
+                listener?.onClassification(result)?.let {
+                    say(it)
+                }
+            } catch (e: Exception) {
+                listener?.onError(e)
             }
         }
 
@@ -498,25 +506,21 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
             this.expectFollowup = false
         }
 
-        override fun speechEvent(event: SpeechContext.Event, context: SpeechContext) {
+        override fun speechEvent(event: SpeechContext.Event, speechContext: SpeechContext) {
             when (event) {
                 SpeechContext.Event.ACTIVATE -> {
                     onTrace(EventTracer.Level.PERF, "ACTIVATE")
                     setOpen(true)
                 }
                 SpeechContext.Event.PARTIAL_RECOGNIZE, SpeechContext.Event.RECOGNIZE -> {
-                    var message = context.transcript
-                    if (config.transcriptEditor != null) {
-                        message = config.transcriptEditor.editTranscript(context.transcript)
-                    }
-                    updateUserMessage(message)
+                    displayTranscript(speechContext)
                 }
                 SpeechContext.Event.TIMEOUT -> {
                     onTrace(EventTracer.Level.PERF, "TIMEOUT")
                     setOpen(false)
                 }
-                SpeechContext.Event.ERROR -> dispatchError(context.error)
-                SpeechContext.Event.TRACE -> onTrace(EventTracer.Level.PERF, context.message)
+                SpeechContext.Event.ERROR -> dispatchError(speechContext.error)
+                SpeechContext.Event.TRACE -> onTrace(EventTracer.Level.PERF, speechContext.message)
                 SpeechContext.Event.DEACTIVATE -> {
                     onTrace(EventTracer.Level.PERF, "DEACTIVATE")
                     setListening(false)
@@ -524,20 +528,18 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
             }
         }
 
-        private fun updateUserMessage(text: String) {
-            if (text.isEmpty()) {
-                return
+        private fun displayTranscript(speechContext: SpeechContext) {
+            var message = speechContext.transcript
+            if (config.transcriptEditor != null) {
+                message = config.transcriptEditor.editTranscript(speechContext.transcript)
             }
-            val message = viewModel.getMessages().value?.lastOrNull()
-            if (message == null || message.isSystem) {
-                addMessage(text, false)
-            } else {
-                viewModel.updateLastUserMessage(text)
+            if (message.isNotEmpty()) {
+                state.addOrUpdateUserMessage(message)
             }
         }
 
         override fun trace(module: SpokestackModule, message: String) {
-            trayListener?.onLog(message)
+            listener?.onLog(message)
         }
 
         override fun error(module: SpokestackModule, err: Throwable) {
@@ -545,7 +547,7 @@ class SpokestackTray private constructor(private val config: TrayConfig) : Fragm
         }
 
         private fun dispatchError(error: Throwable) {
-            trayListener?.onError(error)
+            listener?.onError(error)
         }
     }
 }

@@ -52,12 +52,9 @@ As mentioned above, Spokestack Tray is implemented as a `Fragment` that renders 
     <!-- nested in the main layout, after other views/sublayouts -->
 
     <include
+        android:id="@+id/tray_fragment"
         layout="@layout/spokestack_tray_fragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
+        />
 ```
 
 Then in your activity itself:
@@ -87,20 +84,13 @@ class MyActivity : AppCompatActivity(), SpokestackTrayListener {
         // note that the factory is instantiated and set on the manager BEFORE calling
         // `super.onCreate()`
         super.onCreate(savedInstanceState)
+    }
 
+    override fun onStart() {
         // set the value of the lateinit `tray` var
         tray = SpokestackTray.getInstance(config)
+        super.onStart()
     }
-```
-
-If you prefer using a Fragment transaction manager instead of declaring the Tray Fragment in XML, add this after the code in the last section:
-
-```kotlin
-        val fragment = supportFragmentManager.fragmentFactory.instantiate(classLoader,
-            SpokestackTray::class.java.name)
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.spokestack_tray, fragment)
-            .commitNow()
 ```
 
 ## Configuration
@@ -119,7 +109,7 @@ Most aspects of the tray's UI can be customized. Often this is accomplished in X
 One exception to this is the tray's orientation: Its microphone button defaults to appearing as a right-facing tab on the lefthand side of the screen, with the tray consequently sliding in from the left. It also supports a righthand orientation but requires two changes in order to do so:
 
 1. Call `.orientation(TrayConfig.Orientation.RIGHT)` on the `TrayConfig`builder before building the configuration.
-1. Set appropriate layout parameters when including the tray Fragment in your layout. When the fragment is right-aligned to its parent, layout constraints in the tray's layout itself take care of the rest. Here's the example layout we gave above (a `ConstraintLayout`) modified for a righthand orientation:
+1. Set appropriate layout parameters when including the tray Fragment in your layout. When the fragment is right-aligned to its parent, layout constraints in the tray's layout itself take care of the rest. Here's the example we gave above modified for a righthand orientation:
 ```xml
 <include
   layout="@layout/spokestack_tray_fragment"
@@ -128,6 +118,8 @@ One exception to this is the tray's orientation: Its microphone button defaults 
   app:layout_constraintBottom_toBottomOf="parent"
   app:layout_constraintEnd_toEndOf="parent" />
 ```
+
+We only _need_ the last constraint here; the rest of the attributes are identical to the source layout. Since we're using `include`, though, overriding one attribute means overriding all of them; see the note at the end of the paragraph [here](https://developer.android.com/training/improving-layouts/reusing-layouts#Include).
 
 Value-based UI customizations are listed below. The filenames here point to the original definitions in the library's `res/values` folder, but replacements can be defined elsewhere in your project. The example app illustrates this by overriding the text color for system messages in `res/values/custom_colors.xml`.
 
@@ -165,7 +157,6 @@ Value-based UI customizations are listed below. The filenames here point to the 
 
 ### `styles.xml`
 
-* `spsk_listening`: The text displayed in the tray during active listening (ASR). Defaults to `"LISTENING"`.
 * `spsk_messageFont`: The font family used to display ASR transcripts and system messages in the tray. Defaults to `sans-serif` (Roboto).
 
 

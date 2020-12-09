@@ -36,11 +36,17 @@ import androidx.fragment.app.FragmentFactory
  * }
  * ```
  */
-class SpokestackTrayFactory(private val trayConfig: TrayConfig) : FragmentFactory() {
+class SpokestackTrayFactory(private val trayConfig: TrayConfig) :
+    FragmentFactory() {
+
+
+    companion object {
+        internal val state: TrayState = TrayState(messages = arrayListOf())
+    }
 
     override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
         if (className == SpokestackTray::class.java.name) {
-            return SpokestackTray.getInstance(trayConfig)
+            return SpokestackTray(trayConfig, state)
         }
         return super.instantiate(classLoader, className)
     }
