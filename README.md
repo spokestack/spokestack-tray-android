@@ -34,7 +34,7 @@ To use NLU and TTS, you'll need a [free Spokestack account](https://www.spokesta
 First, though, add the dependency to your app's `build.gradle` (check the JCenter badge above for the latest version):
 
 ```groovy
-implementation 'io.spokestack:tray:0.2.0'
+implementation 'io.spokestack:tray:0.3.0'
 ```
 
 As mentioned above, Spokestack Tray is implemented as a `Fragment` that renders on top of your existing `Activity` and handles voice interaction, so you'll want to add it to your activity's layout:
