@@ -50,9 +50,7 @@ fun downloadFile(fileURL: String, downloadDir: String): String {
     val inStream = c.inputStream
     val buffer = ByteArray(8192)
     var read: Int
-    var downloadedData = 0
     while (inStream.read(buffer).also { read = it } > 0) {
-        downloadedData += read
         f.write(buffer, 0, read)
     }
     f.close()

@@ -1,28 +1,30 @@
 package io.spokestack.tray
 
-import android.content.Context
 import android.os.Parcel
 import android.os.Parcelable
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import io.spokestack.tray.message.Message
 
 /**
  * A simple data class that describes the state necessary to provide a seamless transition
  * across app lifecycle events.
  */
-internal data class TrayState(
+data class TrayState(
+    var isOpen: Boolean = false,
     var isActive: Boolean = false,
     var playTts: Boolean = true,
     var firstOpen: Boolean = true,
+    var expectFollowup: Boolean = false,
     var messageStreamHeight: Int = 0,
     val messages: ArrayList<Message> = ArrayList()
 ) : Parcelable {
 
-    constructor(context: Context) : this() {
-        this.messageStreamHeight =
-            context.resources.getDimensionPixelSize(R.dimen.spsk_messageStreamHeight)
-    }
+    private val messageData: MutableLiveData<ArrayList<Message>> = MutableLiveData(messages)
 
     constructor(parcel: Parcel) : this(
+        parcel.readByte() != 0.toByte(),
+        parcel.readByte() != 0.toByte(),
         parcel.readByte() != 0.toByte(),
         parcel.readByte() != 0.toByte(),
         parcel.readByte() != 0.toByte(),
@@ -30,16 +32,69 @@ internal data class TrayState(
         parcel.readArrayList(ClassLoader.getSystemClassLoader()) as ArrayList<Message>
     )
 
+    fun liveData(): LiveData<ArrayList<Message>> {
+        return messageData
+    }
+
+    /**
+     * Clear the conversation state without resetting any user modifications
+     * like muting TTS or changing the tray size.
+     */
+    fun clear() {
+        apply {
+            expectFollowup = false
+            firstOpen = true
+            messages.clear()
+            messageData.notifyObserver()
+        }
+    }
+
+    /**
+     * Overwrites the current tray state with a previously saved version.
+     *
+     * @param other A saved version of the tray state to load.
+     */
+    fun loadFrom(other: TrayState) {
+        apply {
+            isOpen = other.isOpen
+            isActive = other.isActive
+            playTts = other.playTts
+            firstOpen = other.firstOpen
+            expectFollowup = other.expectFollowup
+            messageStreamHeight = other.messageStreamHeight
+            messages.clear()
+            messages.addAll(other.messages)
+        }
+    }
+
+    fun addMessage(message: Message) {
+        // observers only need to know when to add a message to the chat stream;
+        // other data is only for saving/restoring UI state
+        messages.add((message))
+        messageData.notifyObserver()
+    }
+
+    fun addOrUpdateUserMessage(text: String) {
+        val message = messages.lastOrNull()
+        if (message == null || message.isSystem) {
+            addMessage(Message(content = text))
+        } else {
+            messages[messages.size - 1] = Message(false, text)
+            messageData.notifyObserver()
+        }
+    }
+
     override fun describeContents(): Int {
         // unnecessary
-        Parcelable.CONTENTS_FILE_DESCRIPTOR
         return 0
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
+        dest.writeByte(if (isOpen) 1 else 0)
         dest.writeByte(if (isActive) 1 else 0)
         dest.writeByte(if (playTts) 1 else 0)
         dest.writeByte(if (firstOpen) 1 else 0)
+        dest.writeByte(if (expectFollowup) 1 else 0)
         dest.writeInt(messageStreamHeight)
         dest.writeList(messages as List<Message>)
     }
@@ -56,4 +111,10 @@ internal data class TrayState(
         val SERIALIZATION_KEY = namespaced_key("state")
     }
 
+}
+
+// the LiveData's value must be set (hence incrementing its version) for observers to be updated
+// see https://stackoverflow.com/a/52075248/421784
+fun <T> MutableLiveData<T>.notifyObserver() {
+    this.value = this.value
 }

@@ -1,20 +1,17 @@
 package io.spokestack.tray.example
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import io.spokestack.spokestack.nlu.NLUResult
 import io.spokestack.spokestack.util.EventTracer
 import io.spokestack.tray.*
 
-class MainActivity : AppCompatActivity(), SpokestackTrayListener {
+class MainActivity : TrayActivity(), SpokestackTrayListener {
     private val greeting = "Welcome! This example uses Minecraft sample models. " +
             "Try saying, \"How do I make a castle?\""
     private var lastResponse: String = greeting
 
-    lateinit var tray: SpokestackTray
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        val trayConfig = TrayConfig.Builder()
+    override fun getTrayConfig(): TrayConfig {
+        return TrayConfig.Builder()
             .credentials(
                 "f0bc990c-e9db-4a0c-a2b1-6a6395a3d97e",
                 "5BD5483F573D691A15CFA493C1782F451D4BD666E39A9E7B2EBE287E6A72C6B6"
@@ -28,8 +25,13 @@ class MainActivity : AppCompatActivity(), SpokestackTrayListener {
             // right-aligned to its parent in the layout
 //            .orientation(TrayConfig.Orientation.RIGHT)
             .build()
-        supportFragmentManager.fragmentFactory = SpokestackTrayFactory(trayConfig)
-        tray = SpokestackTray.getInstance(trayConfig)
+    }
+
+    override fun getTrayListener(): SpokestackTrayListener {
+        return this
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
     }

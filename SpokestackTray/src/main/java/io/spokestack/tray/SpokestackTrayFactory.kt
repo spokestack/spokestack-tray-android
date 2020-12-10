@@ -22,25 +22,18 @@ import androidx.fragment.app.FragmentFactory
  *
  *     // you'll probably also want an instance of the tray around to use in your `Activity`:
  *     val tray = SpokestackTray.getInstance(config)
- *
- *     // ...
- *
- *     // if you're using a transaction manager instead of adding the fragment to your layout XML
- *     val fragment = supportFragmentManager.fragmentFactory.instantiate(classLoader,
- *         SpokestackTray::class.java.name)
- *     supportFragmentManager.beginTransaction()
- *         .replace(R.id.spokestack_tray, fragment)
- *         .commitNow()
- *
- *     // ...
  * }
  * ```
  */
 class SpokestackTrayFactory(private val trayConfig: TrayConfig) : FragmentFactory() {
 
+    companion object {
+        internal val state: TrayState = TrayState(messages = arrayListOf())
+    }
+
     override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
         if (className == SpokestackTray::class.java.name) {
-            return SpokestackTray.getInstance(trayConfig)
+            return SpokestackTray(trayConfig, state)
         }
         return super.instantiate(classLoader, className)
     }

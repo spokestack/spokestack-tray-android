@@ -27,15 +27,6 @@ If some of that didn't make sense, fear not! Read on, and we'll cover all the de
 
 ## Usage
 
-First, add the dependency to your app's `build.gradle`:
-
-```groovy
-dependencies {
-    // ...
-    implementation 'io.spokestack:tray:0.1.1'
-}
-```
-
 By default, Spokestack Tray handles ASR, NLU, and TTS for voice interactions with users—that's converting their voice to text, processing that text to produce an action, and synthesizing the app's response to be read back to the user. For more information on these features, see [the Spokestack docs](https://www.spokestack.io/docs/Concepts).
 
 To use NLU and TTS, you'll need a [free Spokestack account](https://www.spokestack.io/create). From your account page, you'll be able to create and download NLU models; and the client ID and secret key are needed at runtime for TTS requests.
@@ -43,7 +34,7 @@ To use NLU and TTS, you'll need a [free Spokestack account](https://www.spokesta
 First, though, add the dependency to your app's `build.gradle` (check the JCenter badge above for the latest version):
 
 ```groovy
-implementation 'io.spokestack:tray:0.1.1'
+implementation 'io.spokestack:tray:0.2.0'
 ```
 
 As mentioned above, Spokestack Tray is implemented as a `Fragment` that renders on top of your existing `Activity` and handles voice interaction, so you'll want to add it to your activity's layout:
@@ -52,15 +43,16 @@ As mentioned above, Spokestack Tray is implemented as a `Fragment` that renders 
     <!-- nested in the main layout, after other views/sublayouts -->
 
     <include
+        android:id="@+id/tray_fragment"
         layout="@layout/spokestack_tray_fragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
+        />
 ```
 
-Then in your activity itself:
+**Note**: Depending on your app layout, you may also have to add `android:clipChildren="false"` to the fragment's parent layout(s) to avoid the microphone tab disappearing as the tray opens.
+
+Then make your activity itself extend `TrayActivity` (a subclass of `AppCompatActivity`), implement the methods it requires, and the library will take care of the rest.
+
+If you'd prefer to do the setup yourself, here's a sample that doesn't use `TrayActivity`:
 
 ```kotlin
 import io.spokestack.tray.*
@@ -87,21 +79,18 @@ class MyActivity : AppCompatActivity(), SpokestackTrayListener {
         // note that the factory is instantiated and set on the manager BEFORE calling
         // `super.onCreate()`
         super.onCreate(savedInstanceState)
+    }
 
+    override fun onStart() {
         // set the value of the lateinit `tray` var
         tray = SpokestackTray.getInstance(config)
+        super.onStart()
     }
 ```
 
-If you prefer using a Fragment transaction manager instead of declaring the Tray Fragment in XML, add this after the code in the last section:
+The Tray is designed for seamless use across activities — for example, to allow a user to continue giving a voice command while the app switches activities — so its state is stored outside the fragment itself and survives fragment destruction. If your app needs to release resources held by the Tray and its underlying `Spokestack` instance, call the tray's `stop()` method. If you then need to re-enable voice control before the current Tray fragment instance is destroyed, you must call `start()`.
 
-```kotlin
-        val fragment = supportFragmentManager.fragmentFactory.instantiate(classLoader,
-            SpokestackTray::class.java.name)
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.spokestack_tray, fragment)
-            .commitNow()
-```
+If you want to keep tray state intact after process death, you can store it in its parent activity's `onSaveInstanceState` and `onRestoreInstanceState` methods using the Tray's `getState()` and `loadState()` methods; see their documentation for more details.
 
 ## Configuration
 
@@ -119,7 +108,7 @@ Most aspects of the tray's UI can be customized. Often this is accomplished in X
 One exception to this is the tray's orientation: Its microphone button defaults to appearing as a right-facing tab on the lefthand side of the screen, with the tray consequently sliding in from the left. It also supports a righthand orientation but requires two changes in order to do so:
 
 1. Call `.orientation(TrayConfig.Orientation.RIGHT)` on the `TrayConfig`builder before building the configuration.
-1. Set appropriate layout parameters when including the tray Fragment in your layout. When the fragment is right-aligned to its parent, layout constraints in the tray's layout itself take care of the rest. Here's the example layout we gave above (a `ConstraintLayout`) modified for a righthand orientation:
+1. Set appropriate layout parameters when including the tray Fragment in your layout. When the fragment is right-aligned to its parent, layout constraints in the tray's layout itself take care of the rest. Here's the example we gave above modified for a righthand orientation:
 ```xml
 <include
   layout="@layout/spokestack_tray_fragment"
@@ -128,6 +117,8 @@ One exception to this is the tray's orientation: Its microphone button defaults 
   app:layout_constraintBottom_toBottomOf="parent"
   app:layout_constraintEnd_toEndOf="parent" />
 ```
+
+We only _need_ the last constraint here; the rest of the attributes are identical to the source layout. Since we're using `include`, though, overriding one attribute means overriding all of them; see the note at the end of the paragraph [here](https://developer.android.com/training/improving-layouts/reusing-layouts#Include).
 
 Value-based UI customizations are listed below. The filenames here point to the original definitions in the library's `res/values` folder, but replacements can be defined elsewhere in your project. The example app illustrates this by overriding the text color for system messages in `res/values/custom_colors.xml`.
 
@@ -165,7 +156,6 @@ Value-based UI customizations are listed below. The filenames here point to the 
 
 ### `styles.xml`
 
-* `spsk_listening`: The text displayed in the tray during active listening (ASR). Defaults to `"LISTENING"`.
 * `spsk_messageFont`: The font family used to display ASR transcripts and system messages in the tray. Defaults to `sans-serif` (Roboto).
 
 

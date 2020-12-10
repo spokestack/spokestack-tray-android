@@ -20,6 +20,7 @@ import kotlin.math.min
 class TrayView(trayContext: Context, attributeSet: AttributeSet) :
     ConstraintLayout(trayContext, attributeSet), View.OnTouchListener {
     private val heightMin = resources.getDimensionPixelSize(R.dimen.spsk_messageStreamMinHeight)
+    private val initHeight = resources.getDimensionPixelSize(R.dimen.spsk_messageStreamHeight)
 
     lateinit var statusBar: LinearLayout
     lateinit var messageStream: RecyclerView
@@ -33,12 +34,15 @@ class TrayView(trayContext: Context, attributeSet: AttributeSet) :
     override fun onFinishInflate() {
         statusBar = findViewById(R.id.statusBar)
         messageStream = findViewById(R.id.messageStream)
-        messageStream.layoutParams.width = context.resources.displayMetrics.widthPixels
+        messageStream.layoutParams.apply {
+            width = resources.displayMetrics.widthPixels
+            height = initHeight
+        }
 
         statusBar.setOnTouchListener(this)
         val tv = TypedValue()
         context.theme.resolveAttribute(R.attr.actionBarSize, tv, true)
-        val screenHeight = context.resources.displayMetrics.heightPixels
+        val screenHeight = resources.displayMetrics.heightPixels
         parentHeight = screenHeight - TypedValue.complexToDimensionPixelSize(
             tv.data, resources.displayMetrics
         )
