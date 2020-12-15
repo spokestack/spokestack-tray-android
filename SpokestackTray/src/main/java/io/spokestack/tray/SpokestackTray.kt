@@ -559,11 +559,20 @@ class SpokestackTray constructor(
                     } else {
                         setOpen(false)
                     }
+                    onTrace(EventTracer.Level.PERF, "TTS audio complete")
                 }
                 TTSEvent.Type.ERROR -> dispatchError(event.error)
                 TTSEvent.Type.AUDIO_AVAILABLE -> onTrace(
                     EventTracer.Level.PERF,
                     "TTS audio available"
+                )
+                TTSEvent.Type.PLAYBACK_STARTED -> onTrace(
+                    EventTracer.Level.PERF,
+                    "TTS started playing"
+                )
+                TTSEvent.Type.PLAYBACK_STOPPED -> onTrace(
+                    EventTracer.Level.PERF,
+                    "TTS stopped playing"
                 )
                 // no-op
                 else -> Unit
