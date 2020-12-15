@@ -336,7 +336,6 @@ class SpokestackTray constructor(
                 SpokestackFactory.getConfigured(
                     config,
                     requireContext(),
-                    lifecycle,
                     spokestackListener
                 )
             if (checkMicPermission()) {
@@ -448,7 +447,7 @@ class SpokestackTray constructor(
         // ensure that spokestack has the right listener (e.g., after returning to an
         // already-created fragment on the backstack)
         spokestack =
-            SpokestackFactory.getConfigured(config, requireContext(), lifecycle, spokestackListener)
+            SpokestackFactory.getConfigured(config, requireContext(), spokestackListener)
         restoreState()
         super.onResume()
     }
