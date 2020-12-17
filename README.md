@@ -34,7 +34,7 @@ To use NLU and TTS, you'll need a [free Spokestack account](https://www.spokesta
 First, though, add the dependency to your app's `build.gradle` (check the JCenter badge above for the latest version):
 
 ```groovy
-implementation 'io.spokestack:tray:0.3.0'
+implementation 'io.spokestack:tray:0.4.0'
 ```
 
 As mentioned above, Spokestack Tray is implemented as a `Fragment` that renders on top of your existing `Activity` and handles voice interaction, so you'll want to add it to your activity's layout:
@@ -88,17 +88,37 @@ class MyActivity : AppCompatActivity(), SpokestackTrayListener {
     }
 ```
 
+When you download Spokestack wakeword or NLU models, you'll have several URLs to different files. `wakewordModelURL` and `nluURL` above only require the path to the relevant directory, not full file URLs. So for the demo "Spokestack" wakeword, set `wakewordModelURL` to "https://d3dmqd7cy685il.cloudfront.net/model/wake/spokestack/".
+
 The Tray is designed for seamless use across activities — for example, to allow a user to continue giving a voice command while the app switches activities — so its state is stored outside the fragment itself and survives fragment destruction. If your app needs to release resources held by the Tray and its underlying `Spokestack` instance, call the tray's `stop()` method. If you then need to re-enable voice control before the current Tray fragment instance is destroyed, you must call `start()`.
 
 If you want to keep tray state intact after process death, you can store it in its parent activity's `onSaveInstanceState` and `onRestoreInstanceState` methods using the Tray's `getState()` and `loadState()` methods; see their documentation for more details.
+
+### Responses
+
+Chances are that if you're allowing the user to talk to your app, you want the app to talk back. Tray is integrated with Spokestack's TTS service, so synthesizing audio is just as easy as transcribing it.
+
+When you extend `TrayActivity`, one of the methods you'll have to implement is `getTrayListener()`, which creates and returns a `SpokestackTrayListener`. This interface assists your app in reacting to events received and produced by the Tray. Because each use case is unique, all its methods are optional; the one we're interested in here is `onClassification`. This method is called after a user's speech has been transcribed by ASR and classified by NLU. It supplies your app with the NLU result and asks you to return a response:
+
+```kotlin
+override fun onClassification(result: NLUResult): VoicePrompt {
+  return if (result.intent == "your-special-intent") {
+    VoicePrompt("I hear you loud and clear")
+  } else {
+  VoicePrompt(
+    "Sorry; I didn't catch that",
+    expectFollowup = true)
+  }
+}
+```
+
+The optional second parameter in the `VoicePrompt` constructor lets the Tray know if you're expecting a response — if you are, it will resume active listening after your prompt is played so the user doesn't have to use the wakeword or a button for each interaction.
 
 ## Configuration
 
 The above sample will get you up and running with minimal fuss, but it's far from all that Spokestack Tray offers. When you're building a `TrayConfig` instance, you can choose to configure and provide the underlying `Spokestack` builder itself. This will let you do things like change ASR providers, set up custom listeners for events from individual systems, and add custom speech processing components if you need to. You can read about the Spokestack builder [here](https://www.spokestack.io/docs/Android/turnkey-configuration).
 
 There are also a range of options that are applicable to the Tray itself, accessible via helper methods on the `TrayConfig.Builder` instance. Describing each one here would make this readme...ponderous, though, so check out the [documentation](https://spokestack.github.io/spokestack-tray-android/-spokestack-tray/) for more details. Documentation on `TrayConfig.Builder` is [here](https://spokestack.github.io/spokestack-tray-android/-spokestack-tray/io.spokestack.tray/-tray-config/-builder**.
-
-**Note**: Spokestack's wakeword and NLU modules each require multiple files for proper configuration. In the above example, `wakewordModelURL` and `nluURL` represent paths to the parent directory containing those models. So when you see the wakeword model URLs listed as `https://subdomain.tld/path/to/detect.tflite`, etc., supply the part before `detect.tflite` to the Tray configuration.
 
 
 ## Customization

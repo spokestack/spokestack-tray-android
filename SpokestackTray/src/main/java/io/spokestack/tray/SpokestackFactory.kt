@@ -1,7 +1,6 @@
 package io.spokestack.tray
 
 import android.content.Context
-import androidx.lifecycle.Lifecycle
 import io.spokestack.spokestack.Spokestack
 import io.spokestack.spokestack.SpokestackAdapter
 import java.io.File
@@ -16,7 +15,6 @@ object SpokestackFactory {
     fun getConfigured(
         trayConfig: TrayConfig,
         context: Context,
-        lifecycle: Lifecycle,
         listener: SpokestackAdapter
     ): Spokestack {
         if (spokestack == null) {
@@ -27,7 +25,6 @@ object SpokestackFactory {
                     .setProperty("trace-level", trayConfig.logLevel)
                     .withTranscriptEditor(trayConfig.transcriptEditor)
                     .withAndroidContext(context.applicationContext)
-                    .withLifecycle(lifecycle)
                     .addListener(listener)
             trayConfig.properties.entries.forEach { entry ->
                 builder.setProperty(entry.key, entry.value)
@@ -38,7 +35,6 @@ object SpokestackFactory {
             spokestack?.let {
                 it.removeListener(this.spokestackListener)
                 it.addListener(listener)
-                it.prepareTts()
                 this.spokestackListener = listener
             }
         }

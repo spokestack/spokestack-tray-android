@@ -336,7 +336,6 @@ class SpokestackTray constructor(
                 SpokestackFactory.getConfigured(
                     config,
                     requireContext(),
-                    lifecycle,
                     spokestackListener
                 )
             if (checkMicPermission()) {
@@ -448,7 +447,7 @@ class SpokestackTray constructor(
         // ensure that spokestack has the right listener (e.g., after returning to an
         // already-created fragment on the backstack)
         spokestack =
-            SpokestackFactory.getConfigured(config, requireContext(), lifecycle, spokestackListener)
+            SpokestackFactory.getConfigured(config, requireContext(), spokestackListener)
         restoreState()
         super.onResume()
     }
@@ -560,11 +559,20 @@ class SpokestackTray constructor(
                     } else {
                         setOpen(false)
                     }
+                    onTrace(EventTracer.Level.PERF, "TTS audio complete")
                 }
                 TTSEvent.Type.ERROR -> dispatchError(event.error)
                 TTSEvent.Type.AUDIO_AVAILABLE -> onTrace(
                     EventTracer.Level.PERF,
                     "TTS audio available"
+                )
+                TTSEvent.Type.PLAYBACK_STARTED -> onTrace(
+                    EventTracer.Level.PERF,
+                    "TTS started playing"
+                )
+                TTSEvent.Type.PLAYBACK_STOPPED -> onTrace(
+                    EventTracer.Level.PERF,
+                    "TTS stopped playing"
                 )
                 // no-op
                 else -> Unit
