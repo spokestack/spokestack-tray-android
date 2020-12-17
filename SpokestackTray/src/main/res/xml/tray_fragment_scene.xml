@@ -23,7 +23,6 @@
             android:layout_height="wrap_content"
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintEnd_toStartOf="parent">
-            <PropertySet motion:motionProgress="0" />
         </Constraint>
         <Constraint
             android:id="@id/micButton"
@@ -40,7 +39,6 @@
             android:layout_height="wrap_content"
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintEnd_toEndOf="parent">
-            <PropertySet motion:motionProgress="1" />
         </Constraint>
         <Constraint
             android:id="@id/micButton"
@@ -72,7 +70,6 @@
             android:layout_height="wrap_content"
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintStart_toEndOf="parent">
-            <PropertySet motion:motionProgress="0" />
         </Constraint>
         <Constraint
             android:id="@id/micButton"
@@ -89,7 +86,6 @@
             android:layout_height="wrap_content"
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintStart_toStartOf="parent">
-            <PropertySet motion:motionProgress="1" />
         </Constraint>
         <Constraint
             android:id="@id/micButton"
