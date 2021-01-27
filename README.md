@@ -1,4 +1,4 @@
-# Spokestack Tray
+<a href="https://www.spokestack.io/blog/integrating-spokestack-in-android" title="Integrating Spokestack in Android">![Spokestack Tray Android](./example/spokestack-tray-android.png)</a>
 
 [ ![JCenter](https://api.bintray.com/packages/spokestack/io.spokestack/tray/images/download.svg) ](https://bintray.com/spokestack/io.spokestack/tray/_latestVersion)
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
