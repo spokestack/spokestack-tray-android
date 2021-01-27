@@ -3,8 +3,6 @@
 [ ![JCenter](https://api.bintray.com/packages/spokestack/io.spokestack/tray/images/download.svg) ](https://bintray.com/spokestack/io.spokestack/tray/_latestVersion)
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
 
-![Example app](./example/tray_demo.gif)
-
 A `Fragment` for adding voice control via Spokestack to any Android app. You can find a simple demo app that shows the tray in action in the `example` directory.
 
 ## Table of Contents
@@ -20,6 +18,8 @@ A `Fragment` for adding voice control via Spokestack to any Android app. You can
 When you add the Spokestack Tray Fragment to your layout, you'll get a microphone button shaped like a tab on the side of the screen (_which_ side it's on is up to you; more on that later). Tapping or dragging the tab reveals the rest of the tray, which is arranged like a messaging stream in a chat app. Opening the tray activates the microphone, and anything the user says will be sent through an automatic speech recognition (ASR) service and displayed as text. That text is then sent to a natural language understanding (NLU) model for classification. Results of the classification are sent to the application component you've established to listen to events from the tray, which can produce a response that the tray will both display and read to the user via Spokestack's text-to-speech (TTS) synthesis service. The microphone will be reenabled if the app's response directs it to; otherwise, the tray will close and disable ASR.
 
 And just like that, you've added voice to your app!
+
+<img align="center" src="./example/tray_demo.gif" alt="Example app">
 
 Oh, and after that initial interaction, the tray can be opened with a wakeword instead of a tap. The wakeword is "Spokestack" by default, but [that can be customized](https://www.spokestack.io/docs/Concepts/wakeword-models).
 
