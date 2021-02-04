@@ -1,8 +1,6 @@
-// publish script based on https://gist.github.com/gsavvid/f7ffe00d846a50de7490c2ecbd7b4169
-
-apply from: "$rootDir/gradle/release.gradle"
 apply plugin: 'org.jetbrains.dokka'
 apply plugin: 'maven-publish'
+apply plugin: 'signing'
 
 dokkaJavadoc {
     outputDirectory.set(file("$buildDir/javadoc"))
@@ -37,6 +35,17 @@ task androidSourcesJar(type: Jar) {
 
 afterEvaluate {
     publishing {
+        repositories {
+            maven {
+                name = "central"
+                def snapshotUrl = "https://oss.sonatype.org/content/repositories/snapshots"
+                def releaseUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+                def ver = rootProject.version.toString()
+                url = ver.contains("dev") ? snapshotUrl : releaseUrl
+                credentials(PasswordCredentials)
+            }
+        }
+
         publications {
             tray(MavenPublication) {
                 from components.release
@@ -46,7 +55,35 @@ afterEvaluate {
 
                 groupId = 'io.spokestack'
                 artifactId = 'tray'
+
+                pom {
+                    name = 'Spokestack Tray'
+                    description = 'A UI widget for integrating with Spokestack'
+                    url = 'https://github.com/spokestack/spokestack-tray-android'
+                    licenses {
+                        license {
+                            name = 'The Apache License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = 'joshz'
+                            name = 'Josh Ziegler'
+                            email = 'josh@spokestack.io'
+                        }
+                    }
+                    scm {
+                        connection = 'scm:git:git://github.com/spokestack/spokestack-tray-android.git'
+                        developerConnection = 'scm:git:git@github.com:spokestack/spokestack-tray-android.git'
+                        url = 'https://github.com/spokestack/spokestack-tray-android'
+                    }
+                }
             }
+        }
+
+        signing {
+            sign publishing.publications.tray
         }
     }
 }

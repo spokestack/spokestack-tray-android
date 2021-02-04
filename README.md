@@ -1,6 +1,6 @@
 <a href="https://www.spokestack.io/blog/integrating-spokestack-in-android" title="Integrating Spokestack in Android">![Spokestack Tray Android](./example/spokestack-tray-android.png)</a>
 
-[ ![JCenter](https://api.bintray.com/packages/spokestack/io.spokestack/tray/images/download.svg) ](https://bintray.com/spokestack/io.spokestack/tray/_latestVersion)
+[ ![Maven Central](https://img.shields.io/maven-central/v/io.spokestack/tray)](https://search.maven.org/search?q=tray)
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
 
 A `Fragment` for adding voice control via Spokestack to any Android app. You can find a simple demo app that shows the tray in action in the `example` directory.
@@ -27,6 +27,12 @@ If some of that didn't make sense, fear not! Read on, and we'll cover all the de
 
 ## Usage
 
+---
+
+**Note**: Spokestack Tray used to be hosted on JCenter, but since the announcement of its [discontinuation](https://jfrog.com/blog/into-the-sunset-bintray-jcenter-gocenter-and-chartcenter), we've moved distribution to Maven Central. Please ensure that your root-level `build.gradle` file includes `mavenCentral()` in its `repositories` block in order to access versions >= 0.4.1.
+
+---
+
 By default, Spokestack Tray handles ASR, NLU, and TTS for voice interactions with users—that's converting their voice to text, processing that text to produce an action, and synthesizing the app's response to be read back to the user. For more information on these features, see [the Spokestack docs](https://www.spokestack.io/docs/Concepts).
 
 To use NLU and TTS, you'll need a [free Spokestack account](https://www.spokestack.io/create). From your account page, you'll be able to create and download NLU models; and the client ID and secret key are needed at runtime for TTS requests.
@@ -34,7 +40,7 @@ To use NLU and TTS, you'll need a [free Spokestack account](https://www.spokesta
 First, though, add the dependency to your app's `build.gradle` (check the JCenter badge above for the latest version):
 
 ```groovy
-implementation 'io.spokestack:tray:0.4.0'
+implementation 'io.spokestack:tray:0.4.1'
 ```
 
 As mentioned above, Spokestack Tray is implemented as a `Fragment` that renders on top of your existing `Activity` and handles voice interaction, so you'll want to add it to your activity's layout:
