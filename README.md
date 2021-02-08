@@ -31,6 +31,8 @@ If some of that didn't make sense, fear not! Read on, and we'll cover all the de
 
 **Note**: Spokestack Tray used to be hosted on JCenter, but since the announcement of its [discontinuation](https://jfrog.com/blog/into-the-sunset-bintray-jcenter-gocenter-and-chartcenter), we've moved distribution to Maven Central. Please ensure that your root-level `build.gradle` file includes `mavenCentral()` in its `repositories` block in order to access versions >= 0.4.1.
 
+Ensure you're using version 0.4.2 or above to properly resolve the dependency on the core Spokestack library after JCenter becomes inaccessible.
+
 ---
 
 By default, Spokestack Tray handles ASR, NLU, and TTS for voice interactions with users—that's converting their voice to text, processing that text to produce an action, and synthesizing the app's response to be read back to the user. For more information on these features, see [the Spokestack docs](https://www.spokestack.io/docs/Concepts).
