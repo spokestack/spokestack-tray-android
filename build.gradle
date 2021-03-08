@@ -1,13 +1,13 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     ext {
-        kotlin_version = "1.4.30"
+        kotlin_version = "1.4.31"
         dokka_version = "1.4.10"
         jfrog_plugin_version = "1.8.5"
         bintray_plugin_version = "8.5.0"
         release_plugin_version = "15.3.0"
         publishing_plugin_version = "17.1.0"
-        spokestack_version="11.0.2"
+        spokestack_version="11.0.3"
         androidx_media_version="1.2.1"
         exoplayer_version="2.11.7"
         tensorflow_version="2.3.0"
@@ -18,7 +18,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.2.0-alpha15'
+        classpath 'com.android.tools.build:gradle:4.2.0-beta05'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
         // deployment
