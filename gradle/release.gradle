@@ -1,6 +1,7 @@
 apply plugin: 'org.jetbrains.dokka'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
+apply plugin: 'net.researchgate.release'
 
 dokkaJavadoc {
     outputDirectory.set(file("$buildDir/javadoc"))
@@ -24,28 +25,17 @@ dokkaJavadoc {
 }
 
 task androidJavadocsJar(type: Jar, dependsOn: dokkaJavadoc) {
-    archiveClassifier = 'javadoc'
+    getArchiveClassifier().set('javadoc')
     from dokkaJavadoc.outputDirectory
 }
 
 task androidSourcesJar(type: Jar) {
-    archiveClassifier = 'sources'
+    getArchiveClassifier().set('sources')
     from android.sourceSets.main.java.srcDirs
 }
 
 afterEvaluate {
     publishing {
-        repositories {
-            maven {
-                name = "central"
-                def snapshotUrl = "https://oss.sonatype.org/content/repositories/snapshots"
-                def releaseUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
-                def ver = rootProject.version.toString()
-                url = ver.contains("dev") ? snapshotUrl : releaseUrl
-                credentials(PasswordCredentials)
-            }
-        }
-
         publications {
             tray(MavenPublication) {
                 from components.release
@@ -87,3 +77,14 @@ afterEvaluate {
         }
     }
 }
+
+release {
+    git {
+        requireBranch = '/v?[0-9]+.[0-9]+.[0-9]+/'
+    }
+}
+
+afterReleaseBuild.dependsOn(
+        ':SpokestackTray:publishToSonatype',
+        ':closeAndReleaseSonatypeStagingRepository'
+)

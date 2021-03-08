@@ -9,8 +9,8 @@ you advice on the proposed changes. If the changes are minor, then feel free
 to make them without discussion.
 
 ## Deploying
-https://github.com/nebula-plugins/nebula-release-plugin
-https://github.com/nebula-plugins/nebula-publishing-plugin
+https://github.com/researchgate/gradle-release
+https://github.com/gradle-nexus/publish-plugin/
 
 
 1. Add the following to your `~/.gradle/gradle.properties`:
@@ -19,14 +19,13 @@ https://github.com/nebula-plugins/nebula-publishing-plugin
 signing.keyId=XXXXXXXX
 signing.password=<key password, if one exists>
 signing.secretKeyRingFile=/Users/me/.gnupg/secring.gpg
-centralUsername=<sonatype username>
-centralPassword=<sonatype password>
+sonatypeUsername=<sonatype username>
+sonatypePassword=<sonatype password>
 ```
 
 1. Start a new branch for your release. Name it according to the release's semantic version number: `v#.#.#`.
-1. Run `./gradlew final`. This will create a git tag and push it to GitHub.
-  * By default, `final` increments the minor version in the project's semantic version.
-  * To bump the major or patch version: `./gradlew final -Prelease.scope=(major|patch)]`.
-1. Run `./gradlew publish -Prelease.useLastTag=true`. This uploads artifacts to a staging repository to be synced with Maven Central.
+1. Run `./gradlew :SpokestackTray:release`. This will prompt for version information, create a git tag, push it to GitHub, and upload build artifacts to Sonatype's OSSRH server.
 1. PR your release branch on GitHub.
 1. Add release notes for the tag on GitHub.
+
+Note that the project is configured to sign the git tag, so you may have problems if your gitconfig does not include signing information.
