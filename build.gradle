@@ -22,9 +22,18 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
         // deployment
-        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:${jfrog_plugin_version}"
-        classpath "com.netflix.nebula:nebula-release-plugin:${release_plugin_version}"
+        classpath 'net.researchgate:gradle-release:2.8.1'
         classpath "org.jetbrains.dokka:dokka-gradle-plugin:${dokka_version}"
+    }
+}
+
+plugins {
+    id 'io.github.gradle-nexus.publish-plugin' version '1.0.0'
+}
+
+nexusPublishing {
+    repositories {
+        sonatype()
     }
 }
 
@@ -40,4 +49,3 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
-apply plugin: "nebula.release"
