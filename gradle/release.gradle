@@ -85,6 +85,6 @@ release {
 }
 
 afterReleaseBuild.dependsOn(
-        ':SpokestackTray:publishToSonatype',
+        ':SpokestackTray:publishTrayPublicationToSonatypeRepository',
         ':closeAndReleaseSonatypeStagingRepository'
 )
