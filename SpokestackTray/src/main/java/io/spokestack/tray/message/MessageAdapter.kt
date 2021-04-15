@@ -1,6 +1,8 @@
 package io.spokestack.tray.message
 
 import android.content.Context
+import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
@@ -8,6 +10,9 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import io.spokestack.tray.R
 
 class MessageAdapter(context: Context) :
@@ -47,7 +52,15 @@ class MessageAdapter(context: Context) :
             layout.startAnimation(bubbleAnimation)
             startPosition = position
         }
-        layout.findViewById<TextView>(R.id.messageContent).text = message.content
+
+        val textView = layout.findViewById<TextView>(R.id.messageContent)
+        if (message.imageURL.isNotEmpty()) {
+            val imageUri = Uri.parse(message.imageURL)
+            Glide.with(holder.itemView).load(imageUri).into(MessageBubbleTarget(textView))
+        } else {
+            textView.setCompoundDrawables(null, null, null, null)
+        }
+        textView.text = message.content
     }
 
     override fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder) {
@@ -57,4 +70,22 @@ class MessageAdapter(context: Context) :
 
     class BubbleViewHolder(val msgLayout: LinearLayout) : RecyclerView.ViewHolder(msgLayout)
 
+    class MessageBubbleTarget(private val textView: TextView) :
+        CustomTarget<Drawable>(SIZE_ORIGINAL, SIZE_ORIGINAL) {
+        override fun onResourceReady(
+            resource: Drawable,
+            transition: Transition<in Drawable>?
+        ) {
+            textView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, resource)
+        }
+
+        override fun onLoadCleared(placeholder: Drawable?) {
+            textView.setCompoundDrawablesWithIntrinsicBounds(
+                null,
+                null,
+                null,
+                placeholder
+            )
+        }
+    }
 }
