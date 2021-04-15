@@ -20,6 +20,9 @@ autolabeler:
   - label: 'breaking'
     title:
       - '/^breaking:/i'
+  - label: 'skip-changelog'
+    title:
+      - '/^\[Gradle/i'
 exclude-labels:
   - 'skip-changelog'
 template: |
