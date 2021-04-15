@@ -8,6 +8,9 @@ categories:
     label: 'feature'
   - title: 'Bug Fixes'
     label: 'fix'
+replacers:
+  - search: '/(fix|feat(ure)?|breaking):\s*/g'
+    replace: ''
 autolabeler:
   - label: 'feature'
     title:
