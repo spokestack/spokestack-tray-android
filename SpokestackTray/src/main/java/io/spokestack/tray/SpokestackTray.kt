@@ -219,12 +219,14 @@ class SpokestackTray constructor(
      *
      * @see [audioEnabled]
      */
-    fun say(prompt: VoicePrompt) {
-        synthesize(prompt)
-        displayAndListen(prompt.text, prompt.expectFollowup)
+    fun say(prompt: Prompt) {
+        if (prompt.text.isNotEmpty()) {
+            synthesize(prompt)
+        }
+        displayAndListen(prompt)
     }
 
-    private fun synthesize(prompt: VoicePrompt) {
+    private fun synthesize(prompt: Prompt) {
         spokestackListener.expectFollowup = prompt.expectFollowup
         if (audioEnabled()) {
             val request = SynthesisRequest.Builder(prompt.voice)
@@ -235,8 +237,9 @@ class SpokestackTray constructor(
         }
     }
 
-    private fun displayAndListen(text: String, listen: Boolean) {
-        addMessage(text, isSystem = true)
+    private fun displayAndListen(prompt: Prompt) {
+        val (text, _, imageURL, listen) = prompt
+        addMessage(text, imageURL, isSystem = true)
         if (audioEnabled() || !listen) {
             // if playback is enabled, the synthesis callback handles reactivating ASR,
             // so we don't explicitly listen here
@@ -304,7 +307,7 @@ class SpokestackTray constructor(
         var playedGreeting = false
         if (isFirstOpen && config.greeting != "") {
             if (config.sayGreeting) {
-                val prompt = VoicePrompt(config.greeting, expectFollowup = true)
+                val prompt = Prompt(config.greeting, expectFollowup = true)
                 synthesize(prompt)
                 playedGreeting = true
             }
@@ -508,9 +511,9 @@ class SpokestackTray constructor(
         return false
     }
 
-    private fun addMessage(text: String, isSystem: Boolean) {
+    private fun addMessage(text: String, imageURL: String = "", isSystem: Boolean) {
         activity?.runOnUiThread {
-            state.addMessage(Message(isSystem, text))
+            state.addMessage(Message(isSystem, text, imageURL))
         }
     }
 

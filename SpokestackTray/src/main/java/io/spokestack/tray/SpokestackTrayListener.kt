@@ -31,7 +31,7 @@ interface SpokestackTrayListener {
      * @param result The classification result.
      * @return A string representing the application's response to the user utterance.
      */
-    fun onClassification(result: NLUResult): VoicePrompt? {
+    fun onClassification(result: NLUResult): Prompt? {
         return null
     }
 

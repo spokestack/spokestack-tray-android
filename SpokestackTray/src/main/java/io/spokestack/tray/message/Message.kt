@@ -5,13 +5,14 @@ import android.os.Parcelable
 import androidx.recyclerview.widget.DiffUtil
 
 /**
- * A simple data class that describes a message in Spokestack. Messages have text contents and can
+ * A simple data class that describes a message in Spokestack. Messages have text or image contents and can
  * be initiated by the user or the system.
  */
-data class Message(val isSystem: Boolean = false, val content: String) : Parcelable {
+data class Message(val isSystem: Boolean = false, val content: String, val imageURL: String = "") : Parcelable {
 
     constructor(parcel: Parcel) : this(
         parcel.readByte() != 0.toByte(),
+        parcel.readString()!!,
         parcel.readString()!!
     )
 
@@ -31,6 +32,7 @@ data class Message(val isSystem: Boolean = false, val content: String) : Parcela
 
             override fun areContentsTheSame(oldItem: Message, newItem: Message): Boolean {
                 return oldItem.content == newItem.content
+                        && oldItem.imageURL == newItem.imageURL
             }
 
         }
@@ -45,6 +47,7 @@ data class Message(val isSystem: Boolean = false, val content: String) : Parcela
 
         if (isSystem != other.isSystem) return false
         if (content != other.content) return false
+        if (imageURL != other.imageURL) return false
 
         return true
     }
@@ -52,6 +55,7 @@ data class Message(val isSystem: Boolean = false, val content: String) : Parcela
     override fun hashCode(): Int {
         var result = isSystem.hashCode()
         result = 31 * result + content.hashCode()
+        result = 31 * result + imageURL.hashCode()
         return result
     }
 
@@ -63,5 +67,6 @@ data class Message(val isSystem: Boolean = false, val content: String) : Parcela
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.writeByte(if (isSystem) 1 else 0)
         dest.writeString(content)
+        dest.writeString(imageURL)
     }
 }
