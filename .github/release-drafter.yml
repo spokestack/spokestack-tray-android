@@ -1,4 +1,4 @@
-name-template: '$RESOLVED_VERSION'
+name-template: 'v$RESOLVED_VERSION'
 change-template: '- $TITLE (#$NUMBER)'
 change-title-escapes: '\<*_&'
 categories:
@@ -20,6 +20,9 @@ autolabeler:
   - label: 'breaking'
     title:
       - '/^breaking:/i'
+  - label: 'skip-changelog'
+    title:
+      - '/^\[Gradle/i'
 exclude-labels:
   - 'skip-changelog'
 template: |
