@@ -1,0 +1,26 @@
+name-template: '$RESOLVED_VERSION'
+change-template: '- $TITLE (#$NUMBER)'
+change-title-escapes: '\<*_&'
+categories:
+  - title: 'Breaking Changes'
+    label: 'breaking'
+  - title: 'Features'
+    label: 'feature'
+  - title: 'Bug Fixes'
+    label: 'fix'
+autolabeler:
+  - label: 'feature'
+    title:
+      - '/^feat(ure)?:/i'
+      - '/\(feature\):/i'
+  - label: 'fix'
+    title:
+      - '/^fix:/i'
+      - '/\(fix\)/i'
+  - label: 'breaking'
+    title:
+      - '/^breaking:/i'
+exclude-labels:
+  - 'skip-changelog'
+template: |
+  $CHANGES
