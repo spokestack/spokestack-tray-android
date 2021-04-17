@@ -40,7 +40,7 @@ class MainActivity : TrayActivity(), SpokestackTrayListener {
         println("LOG: $message")
     }
 
-    override fun onClassification(result: NLUResult): VoicePrompt {
+    override fun onClassification(result: NLUResult): Prompt {
         val (text, followup) = when (result.intent) {
             "AMAZON.RepeatIntent" -> Pair(lastResponse, true)
             "AMAZON.YesIntent" -> Pair("I heard you say yes! What would you like to make?", true)
@@ -52,7 +52,7 @@ class MainActivity : TrayActivity(), SpokestackTrayListener {
 
             else -> Pair(lastResponse, true)
         }
-        return VoicePrompt(text, expectFollowup = followup)
+        return Prompt(text, expectFollowup = followup)
     }
 
     override fun onError(error: Throwable) {
