@@ -26,6 +26,8 @@ autolabeler:
   - label: 'skip-changelog'
     title:
       - '/^\[Gradle/i'
+    body:
+      - '/skip-changelog/'
 exclude-labels:
   - 'skip-changelog'
 template: |
