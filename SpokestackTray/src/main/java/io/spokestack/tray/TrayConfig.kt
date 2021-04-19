@@ -47,7 +47,7 @@ class TrayConfig private constructor(builder: Builder) {
 
     /**
      * Synthesis mode for TTS. This defaults to `TEXT` and should only be changed if
-     * the messages you return to the Tray in [VoicePrompt]s are in SSML or Speech
+     * the messages you return to the Tray in [Prompt]s are in SSML or Speech
      * Markdown format.
      */
     val ttsMode: Mode = builder.ttsMode
@@ -91,6 +91,16 @@ class TrayConfig private constructor(builder: Builder) {
     val nluURL: String? = builder.nluURL
 
     /**
+     * The URL to the Rasa Open Source server. If this is set, Spokestack will use Rasa Core
+     * for both NLU and dialogue management.
+     *
+     * For production use, this endpoint should be secured. See the documentation
+     * for [io.spokestack.spokestack.rasa.RasaOpenSourceNLU] for descriptions of authentication
+     * methods you can specify using [Builder.withProperty].
+     */
+    val rasaOssURL: String? = builder.rasaOssURL
+
+    /**
      * Whether wakeword and NLU models should be forcibly (re-)downloaded on launch.
      */
     val refreshModels: Boolean = builder.refreshModels
@@ -132,6 +142,7 @@ class TrayConfig private constructor(builder: Builder) {
         internal var logLevel: Int = EventTracer.Level.NONE.value(),
         internal var wakewordModelURL: String? = null,
         internal var nluURL: String? = null,
+        internal var rasaOssURL: String? = null,
         internal var refreshModels: Boolean = false,
         internal var editTranscript: ((String) -> String)? = null,
         internal var listener: SpokestackTrayListener? = null,
@@ -240,6 +251,18 @@ class TrayConfig private constructor(builder: Builder) {
          * download multiple files.
          */
         fun nluURL(value: String?) = apply { this.nluURL = value }
+
+        /**
+         * Set the URL to a Rasa Open Source server. If set, [nluURL] will be ignored,
+         * as Rasa Open Source will handle both NLU and dialogue management.
+         *
+         * For production use, this endpoint should be secured. See the documentation
+         * for [io.spokestack.spokestack.rasa.RasaOpenSourceNLU] for descriptions of authentication
+         * methods you can specify with [withProperty].
+         *
+         * @param value The URL to the Rasa Open Source server's REST endpoint.
+         */
+        fun rasaOssUrl(value: String?) = apply { this.rasaOssURL = value }
 
         /**
          * Set whether wakeword and NLU models should be unconditionally redownloaded on

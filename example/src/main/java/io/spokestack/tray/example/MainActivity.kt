@@ -18,7 +18,7 @@ class MainActivity : TrayActivity(), SpokestackTrayListener {
                 "5BD5483F573D691A15CFA493C1782F451D4BD666E39A9E7B2EBE287E6A72C6B6"
             )
             .wakewordModelURL("https://d3dmqd7cy685il.cloudfront.net/model/wake/spokestack")
-            .nluURL("https://d3dmqd7cy685il.cloudfront.net/nlu/production/shared/XtASJqxkO6UwefOzia-he2gnIMcBnR2UCF-VyaIy-OI")
+            .nluURL("https://s.spokestack.io/u/7fYxV")
             .logLevel(EventTracer.Level.PERF.value())
             .withListener(this)
             .greeting(greeting)

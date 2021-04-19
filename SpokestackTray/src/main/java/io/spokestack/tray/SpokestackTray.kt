@@ -23,6 +23,7 @@ import io.spokestack.spokestack.SpeechContext
 import io.spokestack.spokestack.Spokestack
 import io.spokestack.spokestack.SpokestackAdapter
 import io.spokestack.spokestack.SpokestackModule
+import io.spokestack.spokestack.dialogue.DialogueEvent
 import io.spokestack.spokestack.nlu.NLUResult
 import io.spokestack.spokestack.tts.SynthesisRequest
 import io.spokestack.spokestack.tts.TTSEvent
@@ -545,8 +546,22 @@ class SpokestackTray constructor(
             }
 
         override fun nluResult(result: NLUResult) {
+            // if there's a dialogue manager, let it handle generating the
+            // prompts; otherwise, defer to the listener's NLU handling logic
+            if (spokestack.dialogueManager == null) {
+                try {
+                    listener?.onClassification(result)?.let {
+                        say(it)
+                    }
+                } catch (e: Exception) {
+                    listener?.onError(e)
+                }
+            }
+        }
+
+        override fun onDialogueEvent(event: DialogueEvent) {
             try {
-                listener?.onClassification(result)?.let {
+                listener?.onDialogueEvent(event)?.let {
                     say(it)
                 }
             } catch (e: Exception) {
