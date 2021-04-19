@@ -54,7 +54,11 @@ object SpokestackFactory {
         if (trayConfig.nluURL != null) {
             ensureNlu(trayConfig, builder, context)
         } else {
-            builder.withoutNlu()
+            if (trayConfig.rasaOssURL != null) {
+                builder.useRasaOpenSource(trayConfig.rasaOssURL)
+            } else {
+                builder.withoutNlu()
+            }
         }
         return builder
     }

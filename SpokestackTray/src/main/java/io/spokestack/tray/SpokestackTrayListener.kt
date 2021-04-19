@@ -1,7 +1,7 @@
 package io.spokestack.tray
 
+import io.spokestack.spokestack.dialogue.DialogueEvent
 import io.spokestack.spokestack.nlu.NLUResult
-import io.spokestack.spokestack.tts.TTSEvent
 import io.spokestack.spokestack.util.EventTracer
 
 /**
@@ -29,9 +29,19 @@ interface SpokestackTrayListener {
      * Spokestack's NLU classified an utterance.
      *
      * @param result The classification result.
-     * @return A string representing the application's response to the user utterance.
+     * @return A prompt representing the application's response to the user utterance.
      */
     fun onClassification(result: NLUResult): Prompt? {
+        return null
+    }
+
+    /**
+     * Spokestack's dialogue manager emitted an event.
+     *
+     * @param event The dialogue event.
+     * @return A prompt representing the application's response to the user utterance.
+     */
+    fun onDialogueEvent(event: DialogueEvent): Prompt? {
         return null
     }
 
