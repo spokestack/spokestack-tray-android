@@ -52,14 +52,14 @@ dependencies {
 
     // Spokestack dependencies
     api "io.spokestack:spokestack-android:11.2.0"
-    implementation "org.tensorflow:tensorflow-lite:$tensorflow_version"
+    implementation "org.tensorflow:tensorflow-lite:2.3.0"
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
 
     // TTS
     implementation 'androidx.lifecycle:lifecycle-common-java8:2.3.0'
-    implementation "androidx.media:media:$androidx_media_version"
-    implementation "com.google.android.exoplayer:exoplayer-core:$exoplayer_version"
+    implementation "androidx.media:media:1.2.1"
+    implementation "com.google.android.exoplayer:exoplayer-core:2.11.7"
 
     // test dependencies
     testImplementation 'junit:junit:4.13.1'
