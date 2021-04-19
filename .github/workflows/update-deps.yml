@@ -13,7 +13,7 @@ jobs:
         id: update-deps
         with:
           file: .github/dependencies
-          version_name: SPOKESTACK_VERSION
+          version_name: spokestack_version
           repo: spokestack/spokestack-android
 
       - name: Create Pull Request
