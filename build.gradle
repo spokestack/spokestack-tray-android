@@ -1,7 +1,12 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
+    def versions = new Properties()
+    file("versions.properties").withInputStream { versions.load(it) }
+
     ext {
         kotlin_version = "1.4.32"
+        // remove a leading "v" if it exists
+        spokestack_version = versions.getProperty("spokestack_version").stripMargin("v")
     }
     repositories {
         mavenCentral()
