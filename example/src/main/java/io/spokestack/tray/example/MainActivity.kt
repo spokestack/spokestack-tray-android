@@ -12,6 +12,7 @@ class MainActivity : TrayActivity(), SpokestackTrayListener {
 
     override fun getTrayConfig(): TrayConfig {
         return TrayConfig.Builder()
+            // substitute your own credentials
             .credentials(
                 "f0bc990c-e9db-4a0c-a2b1-6a6395a3d97e",
                 "5BD5483F573D691A15CFA493C1782F451D4BD666E39A9E7B2EBE287E6A72C6B6"
@@ -56,6 +57,7 @@ class MainActivity : TrayActivity(), SpokestackTrayListener {
     }
 
     override fun onError(error: Throwable) {
+        error.printStackTrace()
         println("ERROR: ${error.localizedMessage}")
     }
 
