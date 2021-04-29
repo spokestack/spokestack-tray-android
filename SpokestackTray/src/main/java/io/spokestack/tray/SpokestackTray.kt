@@ -588,23 +588,30 @@ class SpokestackTray constructor(
         }
 
         override fun speechEvent(event: SpeechContext.Event, speechContext: SpeechContext) {
+            var logMsg: String? = null
             when (event) {
                 SpeechContext.Event.ACTIVATE -> {
-                    onTrace(EventTracer.Level.PERF, "ACTIVATE")
+                    logMsg = event.name
                     setOpen(true)
                 }
                 SpeechContext.Event.PARTIAL_RECOGNIZE, SpeechContext.Event.RECOGNIZE -> {
                     displayTranscript(speechContext)
                 }
                 SpeechContext.Event.TIMEOUT -> {
-                    onTrace(EventTracer.Level.PERF, "TIMEOUT")
+                    logMsg = event.name
                     setOpen(false)
                 }
-                SpeechContext.Event.ERROR -> dispatchError(speechContext.error)
-                SpeechContext.Event.TRACE -> onTrace(EventTracer.Level.PERF, speechContext.message)
                 SpeechContext.Event.DEACTIVATE -> {
-                    onTrace(EventTracer.Level.PERF, "DEACTIVATE")
+                    logMsg = event.name
                     setListening(false)
+                }
+                else -> return  // noop; traces and errors are handled by the superclass
+            }
+
+            // send PERF log for some events if configured to receive them
+            logMsg?.let {
+                if (config.logLevel <= EventTracer.Level.PERF.value()) {
+                    trace(SpokestackModule.SPEECH_PIPELINE, it)
                 }
             }
         }
