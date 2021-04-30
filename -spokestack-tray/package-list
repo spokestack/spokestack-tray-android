@@ -74,6 +74,7 @@ $dokka.location:io.spokestack.tray/SpokestackTray.SpokestackListener/SpokestackL
 $dokka.location:io.spokestack.tray/SpokestackTray.SpokestackListener/error/#io.spokestack.spokestack.SpokestackModule#kotlin.Throwable/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-spokestack-tray/-spokestack-listener/error.html
 $dokka.location:io.spokestack.tray/SpokestackTray.SpokestackListener/expectFollowup/#/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-spokestack-tray/-spokestack-listener/expect-followup.html
 $dokka.location:io.spokestack.tray/SpokestackTray.SpokestackListener/nluResult/#io.spokestack.spokestack.nlu.NLUResult/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-spokestack-tray/-spokestack-listener/nlu-result.html
+$dokka.location:io.spokestack.tray/SpokestackTray.SpokestackListener/onDialogueEvent/#io.spokestack.spokestack.dialogue.DialogueEvent/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-spokestack-tray/-spokestack-listener/on-dialogue-event.html
 $dokka.location:io.spokestack.tray/SpokestackTray.SpokestackListener/speechEvent/#io.spokestack.spokestack.SpeechContext.Event#io.spokestack.spokestack.SpeechContext/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-spokestack-tray/-spokestack-listener/speech-event.html
 $dokka.location:io.spokestack.tray/SpokestackTray.SpokestackListener/trace/#io.spokestack.spokestack.SpokestackModule#kotlin.String/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-spokestack-tray/-spokestack-listener/trace.html
 $dokka.location:io.spokestack.tray/SpokestackTray.SpokestackListener/ttsEvent/#io.spokestack.spokestack.tts.TTSEvent/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-spokestack-tray/-spokestack-listener/tts-event.html
@@ -109,6 +110,7 @@ $dokka.location:io.spokestack.tray/SpokestackTrayFactory/instantiate/#java.lang.
 $dokka.location:io.spokestack.tray/SpokestackTrayListener///PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-spokestack-tray-listener/index.html
 $dokka.location:io.spokestack.tray/SpokestackTrayListener/onClassification/#io.spokestack.spokestack.nlu.NLUResult/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-spokestack-tray-listener/on-classification.html
 $dokka.location:io.spokestack.tray/SpokestackTrayListener/onClose/#/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-spokestack-tray-listener/on-close.html
+$dokka.location:io.spokestack.tray/SpokestackTrayListener/onDialogueEvent/#io.spokestack.spokestack.dialogue.DialogueEvent/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-spokestack-tray-listener/on-dialogue-event.html
 $dokka.location:io.spokestack.tray/SpokestackTrayListener/onError/#kotlin.Throwable/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-spokestack-tray-listener/on-error.html
 $dokka.location:io.spokestack.tray/SpokestackTrayListener/onLog/#kotlin.String/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-spokestack-tray-listener/on-log.html
 $dokka.location:io.spokestack.tray/SpokestackTrayListener/onOpen/#/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-spokestack-tray-listener/on-open.html
@@ -118,7 +120,7 @@ $dokka.location:io.spokestack.tray/TrayActivity/getTrayConfig/#/PointingToDeclar
 $dokka.location:io.spokestack.tray/TrayActivity/getTrayListener/#/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-tray-activity/get-tray-listener.html
 $dokka.location:io.spokestack.tray/TrayActivity/tray/#/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-tray-activity/tray.html
 $dokka.location:io.spokestack.tray/TrayConfig.Builder///PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-tray-config/-builder/index.html
-$dokka.location:io.spokestack.tray/TrayConfig.Builder/Builder/#io.spokestack.tray.TrayConfig.Orientation#kotlin.Boolean#kotlin.Boolean#kotlin.String#io.spokestack.spokestack.tts.SynthesisRequest.Mode#kotlin.String#kotlin.String?#kotlin.String?#java.util.HashMap[kotlin.String,kotlin.Any]#kotlin.Int#kotlin.String?#kotlin.String?#kotlin.Boolean#kotlin.Function1[kotlin.String,kotlin.String]?#io.spokestack.tray.SpokestackTrayListener?#io.spokestack.spokestack.TranscriptEditor?/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-tray-config/-builder/-builder.html
+$dokka.location:io.spokestack.tray/TrayConfig.Builder/Builder/#io.spokestack.tray.TrayConfig.Orientation#kotlin.Boolean#kotlin.Boolean#kotlin.String#io.spokestack.spokestack.tts.SynthesisRequest.Mode#kotlin.String#kotlin.String?#kotlin.String?#java.util.HashMap[kotlin.String,kotlin.Any]#kotlin.Int#kotlin.String?#kotlin.String?#kotlin.String?#kotlin.Boolean#kotlin.Function1[kotlin.String,kotlin.String]?#io.spokestack.tray.SpokestackTrayListener?#io.spokestack.spokestack.TranscriptEditor?/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-tray-config/-builder/-builder.html
 $dokka.location:io.spokestack.tray/TrayConfig.Builder/build/#/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-tray-config/-builder/build.html
 $dokka.location:io.spokestack.tray/TrayConfig.Builder/credentials/#kotlin.String#kotlin.String/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-tray-config/-builder/credentials.html
 $dokka.location:io.spokestack.tray/TrayConfig.Builder/greeting/#kotlin.String/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-tray-config/-builder/greeting.html
@@ -126,6 +128,7 @@ $dokka.location:io.spokestack.tray/TrayConfig.Builder/haptic/#kotlin.Boolean/Poi
 $dokka.location:io.spokestack.tray/TrayConfig.Builder/logLevel/#kotlin.Int/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-tray-config/-builder/log-level.html
 $dokka.location:io.spokestack.tray/TrayConfig.Builder/nluURL/#kotlin.String?/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-tray-config/-builder/nlu-u-r-l.html
 $dokka.location:io.spokestack.tray/TrayConfig.Builder/orientation/#io.spokestack.tray.TrayConfig.Orientation/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-tray-config/-builder/orientation.html
+$dokka.location:io.spokestack.tray/TrayConfig.Builder/rasaOssUrl/#kotlin.String?/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-tray-config/-builder/rasa-oss-url.html
 $dokka.location:io.spokestack.tray/TrayConfig.Builder/refreshModels/#kotlin.Boolean/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-tray-config/-builder/refresh-models.html
 $dokka.location:io.spokestack.tray/TrayConfig.Builder/sayGreeting/#kotlin.Boolean/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-tray-config/-builder/say-greeting.html
 $dokka.location:io.spokestack.tray/TrayConfig.Builder/spokestackBuilder/#/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-tray-config/-builder/spokestack-builder.html
@@ -153,6 +156,7 @@ $dokka.location:io.spokestack.tray/TrayConfig/logLevel/#/PointingToDeclaration/
 $dokka.location:io.spokestack.tray/TrayConfig/nluURL/#/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-tray-config/nlu-u-r-l.html
 $dokka.location:io.spokestack.tray/TrayConfig/orientation/#/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-tray-config/orientation.html
 $dokka.location:io.spokestack.tray/TrayConfig/properties/#/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-tray-config/properties.html
+$dokka.location:io.spokestack.tray/TrayConfig/rasaOssURL/#/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-tray-config/rasa-oss-u-r-l.html
 $dokka.location:io.spokestack.tray/TrayConfig/refreshModels/#/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-tray-config/refresh-models.html
 $dokka.location:io.spokestack.tray/TrayConfig/sayGreeting/#/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-tray-config/say-greeting.html
 $dokka.location:io.spokestack.tray/TrayConfig/spokestackBuilder/#/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-tray-config/spokestack-builder.html
