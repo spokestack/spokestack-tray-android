@@ -262,7 +262,7 @@ class TrayConfig private constructor(builder: Builder) {
          *
          * @param value The URL to the Rasa Open Source server's REST endpoint.
          */
-        fun rasaOssUrl(value: String?) = apply { this.rasaOssURL = value }
+        fun rasaOssURL(value: String?) = apply { this.rasaOssURL = value }
 
         /**
          * Set whether wakeword and NLU models should be unconditionally redownloaded on
