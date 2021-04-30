@@ -51,8 +51,8 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
 
     // Spokestack dependencies
-    implementation "org.tensorflow:tensorflow-lite:2.3.0"
     api 'io.spokestack:spokestack-android:11.3.0'
+    implementation 'org.tensorflow:tensorflow-lite:2.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.recyclerview:recyclerview:1.2.0'
 
@@ -62,7 +62,7 @@ dependencies {
     implementation "com.google.android.exoplayer:exoplayer-core:2.13.3"
 
     // test dependencies
-    testImplementation 'junit:junit:4.13.1'
+    testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 }
