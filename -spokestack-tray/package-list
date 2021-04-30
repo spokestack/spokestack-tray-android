@@ -128,7 +128,7 @@ $dokka.location:io.spokestack.tray/TrayConfig.Builder/haptic/#kotlin.Boolean/Poi
 $dokka.location:io.spokestack.tray/TrayConfig.Builder/logLevel/#kotlin.Int/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-tray-config/-builder/log-level.html
 $dokka.location:io.spokestack.tray/TrayConfig.Builder/nluURL/#kotlin.String?/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-tray-config/-builder/nlu-u-r-l.html
 $dokka.location:io.spokestack.tray/TrayConfig.Builder/orientation/#io.spokestack.tray.TrayConfig.Orientation/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-tray-config/-builder/orientation.html
-$dokka.location:io.spokestack.tray/TrayConfig.Builder/rasaOssUrl/#kotlin.String?/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-tray-config/-builder/rasa-oss-url.html
+$dokka.location:io.spokestack.tray/TrayConfig.Builder/rasaOssURL/#kotlin.String?/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-tray-config/-builder/rasa-oss-u-r-l.html
 $dokka.location:io.spokestack.tray/TrayConfig.Builder/refreshModels/#kotlin.Boolean/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-tray-config/-builder/refresh-models.html
 $dokka.location:io.spokestack.tray/TrayConfig.Builder/sayGreeting/#kotlin.Boolean/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-tray-config/-builder/say-greeting.html
 $dokka.location:io.spokestack.tray/TrayConfig.Builder/spokestackBuilder/#/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/-tray-config/-builder/spokestack-builder.html
