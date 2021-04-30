@@ -26,6 +26,7 @@ autolabeler:
   - label: 'skip-changelog'
     title:
       - '/^\[Gradle/i'
+      - '/^\Bump/i'
     body:
       - '/skip-changelog/'
 exclude-labels:
