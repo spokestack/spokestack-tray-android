@@ -436,7 +436,7 @@ class SpokestackTray constructor(
             viewAdapter.notifyItemChanged(lastMessage)
             binding.messageStream.scrollToPosition(lastMessage)
         }
-        viewAdapter.observer = observer
+        viewAdapter.onImageLoad = observer
 
         // observe messages for changes
         state.liveData().observe(viewLifecycleOwner, observer)
