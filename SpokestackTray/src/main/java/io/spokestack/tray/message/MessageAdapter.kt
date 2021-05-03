@@ -20,6 +20,7 @@ class MessageAdapter(context: Context) :
 
     private var startPosition = -1
     private val bubbleAnimation = AnimationUtils.loadAnimation(context, R.anim.item_enter)
+    var observer: ((List<Message>) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val msgView: LinearLayout
@@ -70,13 +71,14 @@ class MessageAdapter(context: Context) :
 
     class BubbleViewHolder(val msgLayout: LinearLayout) : RecyclerView.ViewHolder(msgLayout)
 
-    class MessageBubbleTarget(private val textView: TextView) :
+    inner class MessageBubbleTarget(private val textView: TextView) :
         CustomTarget<Drawable>(SIZE_ORIGINAL, SIZE_ORIGINAL) {
         override fun onResourceReady(
             resource: Drawable,
             transition: Transition<in Drawable>?
         ) {
             textView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, resource)
+            observer?.invoke(currentList)
         }
 
         override fun onLoadCleared(placeholder: Drawable?) {
