@@ -433,7 +433,7 @@ class SpokestackTray constructor(
 
         // observe messages for changes
         state.liveData().observe(viewLifecycleOwner, { messages ->
-            viewAdapter.notifyDataSetChanged()
+            viewAdapter.notifyItemChanged(messages.size - 1)
             binding.messageStream.scrollToPosition(messages.size - 1)
         })
 
