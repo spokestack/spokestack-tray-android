@@ -25,6 +25,7 @@ autolabeler:
       - '/^breaking:/i'
   - label: 'skip-changelog'
     title:
+      - '/^v?\d+\.\d+\.\d+/i'
       - '/^\[Gradle/i'
       - '/^\Bump/i'
     body:
