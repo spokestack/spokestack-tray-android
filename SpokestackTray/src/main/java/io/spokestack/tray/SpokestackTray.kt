@@ -431,11 +431,15 @@ class SpokestackTray constructor(
         val viewAdapter = MessageAdapter(requireContext())
         viewAdapter.submitList(state.messages)
 
+        val observer = { messages: List<Message> ->
+            val lastMessage = messages.size - 1
+            viewAdapter.notifyItemChanged(lastMessage)
+            binding.messageStream.scrollToPosition(lastMessage)
+        }
+        viewAdapter.observer = observer
+
         // observe messages for changes
-        state.liveData().observe(viewLifecycleOwner, { messages ->
-            viewAdapter.notifyItemChanged(messages.size - 1)
-            binding.messageStream.scrollToPosition(messages.size - 1)
-        })
+        state.liveData().observe(viewLifecycleOwner, observer)
 
         binding.messageStream.apply {
             setHasFixedSize(true)
