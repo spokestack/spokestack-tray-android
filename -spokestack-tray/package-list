@@ -26,9 +26,9 @@ $dokka.location:io.spokestack.tray.message/MessageAdapter///PointingToDeclaratio
 $dokka.location:io.spokestack.tray.message/MessageAdapter/MessageAdapter/#android.content.Context/PointingToDeclaration/-spokestack-tray/io.spokestack.tray.message/-message-adapter/-message-adapter.html
 $dokka.location:io.spokestack.tray.message/MessageAdapter/getItemCount/#/PointingToDeclaration/-spokestack-tray/io.spokestack.tray.message/-message-adapter/get-item-count.html
 $dokka.location:io.spokestack.tray.message/MessageAdapter/getItemViewType/#kotlin.Int/PointingToDeclaration/-spokestack-tray/io.spokestack.tray.message/-message-adapter/get-item-view-type.html
-$dokka.location:io.spokestack.tray.message/MessageAdapter/observer/#/PointingToDeclaration/-spokestack-tray/io.spokestack.tray.message/-message-adapter/observer.html
 $dokka.location:io.spokestack.tray.message/MessageAdapter/onBindViewHolder/#androidx.recyclerview.widget.RecyclerView.ViewHolder#kotlin.Int/PointingToDeclaration/-spokestack-tray/io.spokestack.tray.message/-message-adapter/on-bind-view-holder.html
 $dokka.location:io.spokestack.tray.message/MessageAdapter/onCreateViewHolder/#android.view.ViewGroup#kotlin.Int/PointingToDeclaration/-spokestack-tray/io.spokestack.tray.message/-message-adapter/on-create-view-holder.html
+$dokka.location:io.spokestack.tray.message/MessageAdapter/onImageLoad/#/PointingToDeclaration/-spokestack-tray/io.spokestack.tray.message/-message-adapter/on-image-load.html
 $dokka.location:io.spokestack.tray.message/MessageAdapter/onViewDetachedFromWindow/#androidx.recyclerview.widget.RecyclerView.ViewHolder/PointingToDeclaration/-spokestack-tray/io.spokestack.tray.message/-message-adapter/on-view-detached-from-window.html
 $dokka.location:io.spokestack.tray////PointingToDeclaration/-spokestack-tray/io.spokestack.tray/index.html
 $dokka.location:io.spokestack.tray//downloadFile/#kotlin.String#kotlin.String/PointingToDeclaration/-spokestack-tray/io.spokestack.tray/download-file.html
