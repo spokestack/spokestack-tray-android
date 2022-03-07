@@ -7,7 +7,7 @@ jobs:
   spokestack:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - uses: reviewdog/action-depup@v1
         id: update-deps
